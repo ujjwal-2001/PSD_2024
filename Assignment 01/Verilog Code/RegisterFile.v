@@ -8,12 +8,14 @@
 //-------------------------------------------------//
 
 module registerfile (
-    input [2:0] Read1, Read2, WriteReg,     // Register addresses
-    input [15:0] WriteData,                 // Data to be written
-    input RegWrite,                         // Write enable
-    input clock,                            // Clock signal
-    output [15:0] Data1,                    // Data read from Read1
-    output [15:0] Data2                     // Data read from Read2
+    input [2:0] Read1,             // Register 1 address
+    input [2:0] Read2,             // Register 2 address
+    input [2:0] WriteReg,          // Register to write to
+    input [15:0] WriteData,        // Data to be written
+    input RegWrite,                // Write enable
+    input clock,                   // Clock signal
+    output [15:0] Data1,           // Data read from Read1
+    output [15:0] Data2            // Data read from Read2
     );
     
     reg [15:0] RF [7:0]; // 8 16-bit registers
@@ -26,5 +28,5 @@ module registerfile (
     always@(posedge clock)begin
         if (RegWrite) RF[WriteReg] <= WriteData;
     end
-    
+
 endmodule
