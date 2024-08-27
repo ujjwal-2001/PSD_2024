@@ -1,3 +1,12 @@
+//====================================================//
+// File Name:   RegisterFile.v
+// Module Name: RegisterFile
+// Author:      Ujjwal Chaudhary, M. Tech. ESE'25, IISc Bangalore.
+// Course:      E3 245 Processor System Design
+// Assignment:  1
+// Topic:       16-bit Multi-cycle Processor
+// ===================================================//
+
 //------------------DESCRIPTION------------------//
 // This is a register file module that contains
 // 8 16-bit registers. Module reads data from two
@@ -7,7 +16,7 @@
 // positive edge of the clock signal.
 //-------------------------------------------------//
 
-module registerfile (
+module RegisterFile (
     input [2:0] Read1,             // Register 1 address
     input [2:0] Read2,             // Register 2 address
     input [2:0] WriteReg,          // Register to write to

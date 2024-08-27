@@ -109,7 +109,7 @@ module DataPath (
 
     // The clock-triggered actions of the datapath
     always @(posedge clock) begin 
-        if (MemWrite) Memory[ALUOut<<1] <= B;   // Write memory--must be a store
+        if (MemWrite) Memory[ALUOut<<1] <= B;   // Write to memory if MemWrite
         ALUOut <= ALUResultOut;                 // Save the ALU result for use on a later clock cycle
         if (IRWrite) IR <= MemOut;              // Write the IR if an instruction fetch 
         MDR <= MemOut;                          // Always save the memory read value

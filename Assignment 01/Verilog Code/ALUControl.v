@@ -1,3 +1,12 @@
+//====================================================//
+// File Name:   ALUControl.v
+// Module Name: ALUControl
+// Author:      Ujjwal Chaudhary, M. Tech. ESE'25, IISc Bangalore.
+// Course:      E3 245 Processor System Design
+// Assignment:  1
+// Topic:       16-bit Multi-cycle Processor
+// ===================================================//
+
 //------------------DESCRIPTION------------------//
 // This is a ALU control module that generates
 // a 4-bit control signal ALUCtl based on the 2-bit

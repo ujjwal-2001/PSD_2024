@@ -1,3 +1,12 @@
+//====================================================//
+// File Name:   ALU.v
+// Module Name: ALU
+// Author:      Ujjwal Chaudhary, M. Tech. ESE'25, IISc Bangalore.
+// Course:      E3 245 Processor System Design
+// Assignment:  1
+// Topic:       16-bit Multi-cycle Processor
+// ===================================================//
+
 //--------------DESCRIPTION----------------//
 // This is a 16-bit ALU module that performs
 // arithmetic and logical operations on two
