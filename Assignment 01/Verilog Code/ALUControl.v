@@ -1,7 +1,20 @@
+//------------------DESCRIPTION------------------//
+// This is a ALU control module that generates
+// a 4-bit control signal ALUCtl based on the 2-bit
+// ALUOp and 4-bit FuncCode inputs. The ALUCtl signal
+// is used to control the operation of the MIPSALU
+// module. The ALUCtl signal is determined as follows:
+// If ALUOp is 00, ALUCtl is ADD
+// If ALUOp is 01, ALUCtl is SUBTRACT
+// If ALUOp is 10, ALUCtl is determined by FuncCode
+// If ALUOp is 11, ALUCtl is ADD
+//-------------------------------------------------//
+
+
 module ALUControl (
-    input [1:0] ALUOp,
-    input [3:0] FuncCode,
-    output reg [3:0] ALUCtl
+    input [1:0] ALUOp,          // ALU operation code
+    input [3:0] FuncCode,       // Function code
+    output reg [3:0] ALUCtl     // ALU control signal
     );
 
     parameter [3:0] ADD = 4'b0010;
@@ -13,10 +26,10 @@ module ALUControl (
 
     always@(*) begin
         case (ALUOp)
-            2'b00: ALUCtl = ADD;
-            2'b01: ALUCtl = SUBTRACT;
+            2'b00: ALUCtl = ADD;                // ALUOp is 00
+            2'b01: ALUCtl = SUBTRACT;           // ALUOp is 01
             2'b10: begin
-                case (FuncCode)
+                case (FuncCode)                 // ALUOp is 10
                     4'b0000: ALUCtl = AND;
                     4'b0001: ALUCtl = OR;
                     4'b0111: ALUCtl = SLT;
@@ -26,7 +39,7 @@ module ALUControl (
                     default: ALUCtl = ADD;
                 endcase
             end
-            default: ALUCtl = ADD;
+            default: ALUCtl = ADD;              
         endcase
     end
 
