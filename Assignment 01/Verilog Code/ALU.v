@@ -13,14 +13,14 @@
 // 16-bit inputs A and B. The operation to be
 // performed is determined by the 4-bit control
 // signal ALUctl. The output of the ALU is
-// ALUOut, which is also 16 bits. The Zero output
-// is true if ALUOut is 0.
+// ALUResultOut, which is also 16 bits. The Zero output
+// is true if ALUResultOut is 0.
 //-----------------------------------------//
 
-module MIPSALU (
-    input [3:0] ALUctl,             // Control signal
+module ALU (
+    input [3:0] ALUCtl,             // Control signal
     input [15:0] A,B,               // Inputs
-    output reg [15:0] ALUOut,       // Output
+    output reg [15:0] ALUResultOut, // Output
     output Zero                     // Zero flag
     );
 
@@ -31,17 +31,17 @@ module MIPSALU (
     parameter [3:0] NOR = 4'b1100;
     parameter [3:0] SLT = 4'b0111;
 
-    assign Zero = (ALUOut==0); // Zero is true if ALUOut is 0
+    assign Zero = (ALUResultOut==0); // Zero is true if ALUResultOut is 0
 
-    always @(ALUctl, A, B) begin 
-        case (ALUctl)               // Perform operation based on ALUctl
-            ADD: ALUOut = A + B;
-            SUBTRACT: ALUOut = A - B;
-            AND: ALUOut = A & B;
-            OR: ALUOut = A | B;
-            NOR: ALUOut = ~(A | B);
-            SLT: ALUOut = (A < B) ? 1 : 0;
-            default: ALUOut = A + B;
+    always @(ALUCtl, A, B) begin 
+        case (ALUCtl)               // Perform operation based on ALUctl
+            ADD: ALUResultOut = A + B;
+            SUBTRACT: ALUResultOut = A - B;
+            AND: ALUResultOut = A & B;
+            OR: ALUResultOut = A | B;
+            NOR: ALUResultOut = ~(A | B);
+            SLT: ALUResultOut = (A < B) ? 1 : 0;
+            default: ALUResultOut = A + B;
         endcase
     end
 

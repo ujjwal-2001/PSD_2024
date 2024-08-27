@@ -23,7 +23,6 @@
 // The module is synchronous and updates the components on the positive edge of the clock signal.
 //--------------------------------------------------------------------------------------------------------//
 
-
 module DataPath ( 
     input [1:0] ALUOp,      // ALU operation control
     input [1:0] ALUSrcB,    // ALU register B input control
@@ -45,12 +44,12 @@ module DataPath (
     reg [15:0] PC, Memory[0:1023];          // Program counter and memory
     reg [15:0] MDR, IR;                     // Memory data register and instruction register
     reg [15:0] ALUOut;                      // ALU output
+    reg [15:0] PCValue, ALUBin;             // PC value and ALU B input
     wire [15:0] A, B;                       // Register file read data
     wire [15:0] SignExtendOffset;           // Sign-extended offset
     wire [15:0] PCOffset, ALUResultOut;     // PC offset and ALU result
-    wire [15:0] PCValue, JumpAddr;          // PC value and jump address
-    wire [15:0] Writedata, ALUAin,          // Write data and ALU input A
-    wire [15:0] ALUBin,MemOut;              // ALU input B and memory output
+    wire [15:0] JumpAddr, MemOut;           // Jump address and memory output
+    wire [15:0] Writedata, ALUAin;          // Write data and ALU input A
     wire [3:0] ALUCtl;                      // ALU control bits
     wire Zero;                              // ALU zero flag output        
     wire[2:0] Writereg;                     // Write register address
