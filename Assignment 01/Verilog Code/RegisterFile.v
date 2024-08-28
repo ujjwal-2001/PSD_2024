@@ -33,12 +33,12 @@ module RegisterFile (
     // Read data from registers
     assign Data1 = RF[Read1];   
     assign Data2 = RF[Read2];
+    assign RF[0] = 16'b0; // Register 0 always reads 0
 
     // Write data to a register if RegWrite is high
     always@(posedge clock)begin
 
         if(reset)begin
-            RF[0] <= 16'b0;
             RF[1] <= 16'b0;
             RF[2] <= 16'b0;
             RF[3] <= 16'b0;
@@ -48,7 +48,12 @@ module RegisterFile (
             RF[7] <= 16'b0;
         end
 
-        if (RegWrite) RF[WriteReg] <= WriteData;
+        if (RegWrite) begin
+            if(WriteReg != 3'b000)begin     // Ignore writes to register 0
+                RF[WriteReg] <= WriteData;  // Write data to the specified register
+            end
+        end
+
     end
 
 endmodule
