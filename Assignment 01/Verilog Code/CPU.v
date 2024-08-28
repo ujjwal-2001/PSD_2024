@@ -23,8 +23,13 @@ module CPU (
     input reset     // Reset signal
     );
 
-    parameter LW = 3'b001, SW = 3'b010;         // Define opcodes
-    parameter BEQ=3'b011, J=3'b100, R=3'b000;  
+    // Opcode definitions
+    parameter LW    = 3'b001;
+    parameter SW    = 3'b010;
+    parameter BEQ   = 3'b011;
+    parameter J     = 3'b100;
+    parameter R     = 3'b000; 
+    parameter END   = 3'b111;  
     
     reg [3:0] state, nextstate;             // State and next state
     wire [1:0] ALUOp, ALUSrcB, PCSource;    // Control signals
@@ -80,27 +85,30 @@ module CPU (
     // State 7: R-type instruction computation
     // State 8: Branch completion
     // State 9: Jump completion
+    // state 10: End
     always@(*)begin
         case(state)
             4'd0: nextstate = 4'd1; 
             4'd1: begin
                 case(opcode)
-                    LW: nextstate = 4'd2;
-                    SW: nextstate = 4'd2;
-                    R: nextstate = 4'd6;
-                    BEQ: nextstate = 4'd8;
-                    J: nextstate = 4'd9;
+                    LW  : nextstate = 4'd2;
+                    SW  : nextstate = 4'd2;
+                    R   : nextstate = 4'd6;
+                    BEQ : nextstate = 4'd8;
+                    J   : nextstate = 4'd9;
+                    END : nextstate = 4'd10;
                     default: nextstate = 4'd6;
                 endcase
             end 
-            4'd2: nextstate = (opcode==LW) ? 4'd3 : 4'd5;
-            4'd3: nextstate = 4'd4;
-            4'd4: nextstate = 4'd0;
-            4'd5: nextstate = 4'd0;
-            4'd6: nextstate = 4'd7;
-            4'd7: nextstate = 4'd0;
-            4'd8: nextstate = 4'd0;
-            4'd9: nextstate = 4'd0;
+            4'd2 : nextstate = (opcode==LW) ? 4'd3 : 4'd5;
+            4'd3 : nextstate = 4'd4;
+            4'd4 : nextstate = 4'd0;
+            4'd5 : nextstate = 4'd0;
+            4'd6 : nextstate = 4'd7;
+            4'd7 : nextstate = 4'd0;
+            4'd8 : nextstate = 4'd0;
+            4'd9 : nextstate = 4'd0;
+            4'd10: nextstate = 4'd10;
             default: nextstate = 4'd1;            
         endcase
     end
