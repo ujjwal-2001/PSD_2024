@@ -33,7 +33,6 @@ module RegisterFile (
     // Read data from registers
     assign Data1 = RF[Read1];   
     assign Data2 = RF[Read2];
-    assign RF[0] = 16'b0; // Register 0 always reads 0
 
     // Write data to a register if RegWrite is high
     always@(posedge clock)begin

@@ -61,14 +61,14 @@ module DataPath (
 
     initial PC = 0; //start the PC at 0
                                                     
-    assign MemOut = MemRead ? Memory[(IorD ? ALUOut : PC)>>2]:0;    // Read memory if MemRead ******** >>2
-    assign opcode = IR[15:13];                          //get the opcode from the IR
-    assign Writereg = RegDst ? IR[6:4]: IR[9:7];        // Get the write register number
+    assign MemOut    = MemRead ? Memory[(IorD ? ALUOut : PC)>>2]:0;    // Read memory if MemRead ******** >>2
+    assign opcode    = IR[15:13];                          //get the opcode from the IR
+    assign Writereg  = RegDst ? IR[6:4]: IR[9:7];        // Get the write register number
     assign Writedata = MemtoReg ? MDR : ALUOut;         // Get the data to write to the register
     assign SignExtendOffset = {{9{IR[15]}},IR[6:0]};    // Sign-extend the offset
-    assign PCOffset = SignExtendOffset << 1;            // Shift the offset left by 1
-    assign ALUAin = ALUSrcA ? A : PC;                   // Select the A input to the ALU
-    assign JumpAddr = {PC[15], IR[12:0],2'b0};          // The jump address
+    assign PCOffset  = SignExtendOffset << 1;            // Shift the offset left by 1
+    assign ALUAin    = ALUSrcA ? A : PC;                   // Select the A input to the ALU
+    assign JumpAddr  = {PC[15], IR[12:0],2'b0};          // The jump address
 
     ALUControl alucontroller (      // ALU control unit
         .ALUOp(ALUOp),                      // ALU operation code
@@ -124,6 +124,8 @@ module DataPath (
             IR      <= 0;       // Reset the instruction register
         end
         else begin
+            A <= ReadData1;                        // Read data from register 1
+            B <= ReadData2;                        // Read data from register 2
             if (MemWrite) Memory[ALUOut<<1] <= B;   // Write to memory if MemWrite
             ALUOut <= ALUResultOut;                 // Save the ALU result for use on a later clock cycle
             if (IRWrite) IR <= MemOut;              // Write the IR if an instruction fetch 

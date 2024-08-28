@@ -39,7 +39,7 @@ module CPU (
     wire  PCWrite, PCWriteCond, ALUSrcA;    // Control signals
     wire  IRWwrite, MemtoReg;               // Control signals
 
-    DataPath MIPSDP (                // DataPath module instance
+    DataPath DP (                // DataPath module instance
         .ALUOp(ALUOp), 
         .ALUSrcB(ALUSrcB), 
         .PCSource(PCSource), 
