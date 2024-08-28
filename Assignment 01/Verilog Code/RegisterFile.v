@@ -23,6 +23,7 @@ module RegisterFile (
     input [15:0] WriteData,        // Data to be written
     input RegWrite,                // Write enable
     input clock,                   // Clock signal
+    input reset,                   // Reset signal
     output [15:0] Data1,           // Data read from Read1
     output [15:0] Data2            // Data read from Read2
     );
@@ -35,6 +36,18 @@ module RegisterFile (
 
     // Write data to a register if RegWrite is high
     always@(posedge clock)begin
+
+        if(reset)begin
+            RF[0] <= 16'b0;
+            RF[1] <= 16'b0;
+            RF[2] <= 16'b0;
+            RF[3] <= 16'b0;
+            RF[4] <= 16'b0;
+            RF[5] <= 16'b0;
+            RF[6] <= 16'b0;
+            RF[7] <= 16'b0;
+        end
+
         if (RegWrite) RF[WriteReg] <= WriteData;
     end
 

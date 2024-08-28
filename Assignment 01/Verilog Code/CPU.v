@@ -19,7 +19,8 @@
 // `include "DataPath.v"
 
 module CPU (
-    input clock     // Clock signal
+    input clock,    // Clock signal
+    input reset     // Reset signal
     );
 
     parameter LW = 3'b001, SW = 3'b010;         // Define opcodes
@@ -48,10 +49,9 @@ module CPU (
         .PCWriteCond(PCWriteCond), 
         .ALUSrcA(ALUSrcA), 
         .clock(clock), 
+        .reset(reset),
         .opcode(opcode)
     );
-    
-    initial begin state = 0; end    // Initialize state to 0
     
     // Control signals based on state and opcode
     assign PCWrite      = (state==0) | (state==9);
@@ -107,7 +107,8 @@ module CPU (
 
     // Update the state on the positive edge of the clock
     always @(posedge clock) begin 
-        state <= nextstate;
+        if(reset) state <= 4'd0;
+        else state <= nextstate;
     end
 
 endmodule

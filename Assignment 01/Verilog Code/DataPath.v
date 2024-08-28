@@ -41,6 +41,7 @@ module DataPath (
     input PCWriteCond,      // Conditional PC write control
     input ALUSrcA,          // ALU register A input control
     input clock,            // Clock signal
+    input reset,            // Reset signal
     output [2:0] opcode     // Opcode output
     );
 
@@ -48,7 +49,8 @@ module DataPath (
     reg [15:0] MDR, IR;                     // Memory data register and instruction register
     reg [15:0] ALUOut;                      // ALU output
     reg [15:0] PCValue, ALUBin;             // PC value and ALU B input
-    wire [15:0] A, B;                       // Register file read data
+    reg [15:0] A, B;                        // Register A and B
+    wire [15:0] ReadData1, ReadData2;       // Register file read data
     wire [15:0] SignExtendOffset;           // Sign-extended offset
     wire [15:0] PCOffset, ALUResultOut;     // PC offset and ALU result
     wire [15:0] JumpAddr, MemOut;           // Jump address and memory output
@@ -60,7 +62,7 @@ module DataPath (
     initial PC = 0; //start the PC at 0
                                                     
     assign MemOut = MemRead ? Memory[(IorD ? ALUOut : PC)>>2]:0;    // Read memory if MemRead ******** >>2
-    assign opcode = IR[15:13];          //get the opcode from the IR
+    assign opcode = IR[15:13];                          //get the opcode from the IR
     assign Writereg = RegDst ? IR[6:4]: IR[9:7];        // Get the write register number
     assign Writedata = MemtoReg ? MDR : ALUOut;         // Get the data to write to the register
     assign SignExtendOffset = {{9{IR[15]}},IR[6:0]};    // Sign-extend the offset
@@ -76,10 +78,10 @@ module DataPath (
     
     always@(*) begin                 
         case(PCSource)              // Select the PC source
-            2'b00: PCValue = ALUResultOut;      // Incremented PC
-            2'b01: PCValue = ALUOut;            // Branch
-            2'b10: PCValue = JumpAddr;          // Jump
-            default: PCValue = ALUResultOut;    // Default
+            2'b00: PCValue   = ALUResultOut;      // Incremented PC
+            2'b01: PCValue   = ALUOut;            // Branch
+            2'b10: PCValue   = JumpAddr;          // Jump
+            default: PCValue = ALUResultOut;      // Default
         endcase
 
         case(ALUSrcB)               // Select the B input to the ALU
@@ -105,17 +107,29 @@ module DataPath (
         .WriteData(Writedata),
         .RegWrite(RegWrite),
         .clock(clock),
-        .Data1(A),
-        .Data2(B)
+        .reset(reset),
+        .Data1(ReadData1),
+        .Data2(ReadData2)
     ); 
 
     // The clock-triggered actions of the datapath
     always @(posedge clock) begin 
-        if (MemWrite) Memory[ALUOut<<1] <= B;   // Write to memory if MemWrite
-        ALUOut <= ALUResultOut;                 // Save the ALU result for use on a later clock cycle
-        if (IRWrite) IR <= MemOut;              // Write the IR if an instruction fetch 
-        MDR <= MemOut;                          // Always save the memory read value
-        if (PCWrite || (PCWriteCond & Zero)) PC <= PCValue;     // Update the PC if a write is enabled
+
+        if (reset) begin
+            PC      <= 0;       // Reset the PC
+            A       <= 0;       // Reset register A
+            B       <= 0;       // Reset register B
+            MDR     <= 0;       // Reset the memory data register
+            ALUOut  <= 0;       // Reset the ALU output
+            IR      <= 0;       // Reset the instruction register
+        end
+        else begin
+            if (MemWrite) Memory[ALUOut<<1] <= B;   // Write to memory if MemWrite
+            ALUOut <= ALUResultOut;                 // Save the ALU result for use on a later clock cycle
+            if (IRWrite) IR <= MemOut;              // Write the IR if an instruction fetch 
+            MDR <= MemOut;                          // Always save the memory read value
+            if (PCWrite || (PCWriteCond & Zero)) PC <= PCValue;     // Update the PC if a write is enabled
+        end
     end 
 
 endmodule
