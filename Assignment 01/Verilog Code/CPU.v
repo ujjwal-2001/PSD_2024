@@ -19,19 +19,21 @@
 // `include "DataPath.v"
 
 module CPU (
-    input clock
+    input clock     // Clock signal
     );
 
-    parameter LW = 3'b001, SW = 3'b010;
+    parameter LW = 3'b001, SW = 3'b010;         // Define opcodes
     parameter BEQ=3'b011, J=3'b100, R=3'b000;  
+    
+    reg [3:0] state, nextstate;             // State and next state
+    wire [1:0] ALUOp, ALUSrcB, PCSource;    // Control signals
+    wire [2:0] opcode;                      // Opcode of the instruction
+    wire RegDst, MemRead, MemWrite;         // Control signals
+    wire  IorD, RegWrite, IRWrite;          // Control signals
+    wire  PCWrite, PCWriteCond, ALUSrcA;    // Control signals
+    wire  IRWwrite, MemtoReg;               // Control signals
 
-    reg [3:0] state, nextstate;
-    wire [1:0] ALUOp, ALUSrcB, PCSource; 
-    wire [2:0] opcode; 
-    wire RegDst, MemRead, MemWrite, IorD, RegWrite, IRWrite, PCWrite, PCWriteCond; 
-    wire ALUSrcA, MemoryOp, IRWwrite, MemtoReg; 
-
-    DataPath MIPSDP (   
+    DataPath MIPSDP (                // DataPath module instance
         .ALUOp(ALUOp), 
         .ALUSrcB(ALUSrcB), 
         .PCSource(PCSource), 
@@ -49,8 +51,9 @@ module CPU (
         .opcode(opcode)
     );
     
-    initial begin state = 0; end // start the state machine in state 0 ***************
+    initial begin state = 0; end    // Initialize state to 0
     
+    // Control signals based on state and opcode
     assign PCWrite      = (state==0) | (state==9);
     assign PCWriteCond  = (state==8); 
     assign IorD         = (state==3) | (state==5); 
@@ -66,6 +69,17 @@ module CPU (
     assign RegDst       = (state==7);
 
     // Next state logic
+    // The state machine sequences the operations based on the opcode
+    // State 0: Fetch instruction
+    // State 1: Decode instruction
+    // State 2: Memory address calculation
+    // State 3: Memory access for load
+    // State 4: Write data to memory
+    // State 5: Memory access for store
+    // State 6: Execute R-type instruction
+    // State 7: R-type instruction computation
+    // State 8: Branch completion
+    // State 9: Jump completion
     always@(*)begin
         case(state)
             4'd0: nextstate = 4'd1; 
@@ -91,8 +105,8 @@ module CPU (
         endcase
     end
 
-    // Here is the state machine, which only has to sequence states
-    always @(posedge clock) begin // all state updates on a positive clock edge
+    // Update the state on the positive edge of the clock
+    always @(posedge clock) begin 
         state <= nextstate;
     end
 
