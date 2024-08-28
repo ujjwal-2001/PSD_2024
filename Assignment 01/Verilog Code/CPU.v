@@ -1,0 +1,99 @@
+//====================================================//
+// File Name:   CPU.v
+// Module Name: CPU
+// Author:      Ujjwal Chaudhary, M. Tech. ESE'25, IISc Bangalore.
+// Course:      E3 245 Processor System Design
+// Assignment:  1
+// Topic:       16-bit Multi-cycle Processor
+// ===================================================//
+
+//--------------------------------------------DESCRIPTION-----------------------------------------------//
+// This is a CPU module that contains the main components of a MIPS processor. The module contains
+// a state machine that sequences the operations of the processor based on the opcode of the instruction.
+// The module interfaces with the DataPath module to control the operation of the processor. The module
+// contains control signals for the DataPath module and updates the state machine based on the opcode
+// of the instruction. The module is synchronous and updates the state machine on the positive edge of
+// the clock signal.
+//--------------------------------------------------------------------------------------------------------//
+
+// `include "DataPath.v"
+
+module CPU (
+    input clock
+    );
+
+    parameter LW = 3'b001, SW = 3'b010;
+    parameter BEQ=3'b011, J=3'b100, R=3'b000;  
+
+    reg [3:0] state, nextstate;
+    wire [1:0] ALUOp, ALUSrcB, PCSource; 
+    wire [2:0] opcode; 
+    wire RegDst, MemRead, MemWrite, IorD, RegWrite, IRWrite, PCWrite, PCWriteCond; 
+    wire ALUSrcA, MemoryOp, IRWwrite, MemtoReg; 
+
+    DataPath MIPSDP (   
+        .ALUOp(ALUOp), 
+        .ALUSrcB(ALUSrcB), 
+        .PCSource(PCSource), 
+        .RegDst(RegDst), 
+        .MemtoReg(MemtoReg),
+        .MemRead(MemRead), 
+        .MemWrite(MemWrite), 
+        .IorD(IorD), 
+        .RegWrite(RegWrite), 
+        .IRWrite(IRWrite),
+        .PCWrite(PCWrite), 
+        .PCWriteCond(PCWriteCond), 
+        .ALUSrcA(ALUSrcA), 
+        .clock(clock), 
+        .opcode(opcode)
+    );
+    
+    initial begin state = 0; end // start the state machine in state 0 ***************
+    
+    assign PCWrite      = (state==0) | (state==9);
+    assign PCWriteCond  = (state==8); 
+    assign IorD         = (state==3) | (state==5); 
+    assign MemRead      = (state==0) | (state==3);
+    assign MemWrite     = (state==5);
+    assign IRWrite      = (state==0);
+    assign MemtoReg     = (state==4);
+    assign PCSource     = {(state==9), (state==8)}; 
+    assign ALUOp        = {(state==6), (state==8)}; 
+    assign ALUSrcB      = {(state==1) | (state==2), (state==1) | (state==0)};
+    assign ALUSrcA      = (state==2) | (state==6) | (state==8);
+    assign RegWrite     = (state==4) | (state==7);
+    assign RegDst       = (state==7);
+
+    // Next state logic
+    always@(*)begin
+        case(state)
+            4'd0: nextstate = 4'd1; 
+            4'd1: begin
+                case(opcode)
+                    LW: nextstate = 4'd2;
+                    SW: nextstate = 4'd2;
+                    R: nextstate = 4'd6;
+                    BEQ: nextstate = 4'd8;
+                    J: nextstate = 4'd9;
+                    default: nextstate = 4'd6;
+                endcase
+            end 
+            4'd2: nextstate = (opcode==LW) ? 4'd3 : 4'd5;
+            4'd3: nextstate = 4'd4;
+            4'd4: nextstate = 4'd0;
+            4'd5: nextstate = 4'd0;
+            4'd6: nextstate = 4'd7;
+            4'd7: nextstate = 4'd0;
+            4'd8: nextstate = 4'd0;
+            4'd9: nextstate = 4'd0;
+            default: nextstate = 4'd1;            
+        endcase
+    end
+
+    // Here is the state machine, which only has to sequence states
+    always @(posedge clock) begin // all state updates on a positive clock edge
+        state <= nextstate;
+    end
+
+endmodule

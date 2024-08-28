@@ -22,6 +22,9 @@
 // 9. Generate the opcode from the instruction register
 // The module is synchronous and updates the components on the positive edge of the clock signal.
 //--------------------------------------------------------------------------------------------------------//
+// `include "ALU.v"
+// `include "RegisterFile.v"
+// `include "ALUControl.v"
 
 module DataPath ( 
     input [1:0] ALUOp,      // ALU operation control
