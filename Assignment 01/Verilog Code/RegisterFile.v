@@ -22,7 +22,8 @@ module RegisterFile (
     input clock,                   // Clock signal
     input reset,                   // Reset signal
     output [15:0] Data1,           // Data read from Read1
-    output [15:0] Data2            // Data read from Read2
+    output [15:0] Data2,           // Data read from Read2
+    output [15:0] R1
     );
     
     reg [15:0] RF [7:0]; // 8 16-bit registers
@@ -30,6 +31,7 @@ module RegisterFile (
     // Read data from registers
     assign Data1 = RF[Read1];   
     assign Data2 = RF[Read2];
+    assign R1 = RF[1];
 
     // Write data to a register if RegWrite is high
     always@(posedge clock)begin

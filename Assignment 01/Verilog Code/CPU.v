@@ -21,6 +21,7 @@
 module CPU (
     input clock,    // Clock signal
     input reset     // Reset signal
+    output reg1,    // Register 1 address
     );
 
     // Opcode definitions
@@ -55,7 +56,8 @@ module CPU (
         .ALUSrcA(ALUSrcA), 
         .clock(clock), 
         .reset(reset),
-        .opcode(opcode)
+        .opcode(opcode),
+        .R1(reg1)
     );
     
     // Control signals based on state and opcode

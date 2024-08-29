@@ -43,6 +43,7 @@ module DataPath (
     input clock,            // Clock signal
     input reset,            // Reset signal
     output [2:0] opcode     // Opcode output
+    output [15:0] R1        // Register 1 output
     );
 
     reg [15:0] PC, Memory[0:1023];          // Program counter and memory
@@ -122,7 +123,8 @@ module DataPath (
         .clock(clock),
         .reset(reset),
         .Data1(ReadData1),
-        .Data2(ReadData2)
+        .Data2(ReadData2),
+        .R1(R1)
     ); 
 
     // The clock-triggered actions of the datapath
