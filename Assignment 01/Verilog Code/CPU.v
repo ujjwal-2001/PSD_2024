@@ -1,10 +1,10 @@
 //====================================================//
-// File Name:   CPU.v
-// Module Name: CPU
-// Author:      Ujjwal Chaudhary, M. Tech. ESE'25, IISc Bangalore.
-// Course:      E3 245 Processor System Design
-// Assignment:  1
-// Topic:       16-bit Multi-cycle Processor
+// File Name    :   CPU.v
+// Module Name  :   CPU
+// Author       :   Ujjwal Chaudhary, M. Tech. ESE'25, IISc Bangalore.
+// Course       :   E3 245 Processor System Design
+// Assignment   :   1
+// Topic        :   16-bit Multi-cycle Processor
 // ===================================================//
 
 //--------------------------------------------DESCRIPTION-----------------------------------------------//
