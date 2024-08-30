@@ -100,7 +100,7 @@ module DataPath (
 
         case(ALUSrcB)               // Select the B input to the ALU
             2'b00: ALUBin = B;                  // Register B
-            2'b01: ALUBin = 16'd2;              // Constant 2
+            2'b01: ALUBin = 16'd1;              // Constant 1
             2'b10: ALUBin = SignExtendOffset;   // Sign-extended offset
             2'b11: ALUBin = PCOffset;           // Sign-extended offset << 2
         endcase
