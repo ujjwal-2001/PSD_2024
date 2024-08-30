@@ -45,11 +45,22 @@ module TOP_tb();
 endmodule
 
 //=================Instructions in instructions.coe file=================//
-//   The 10 numbers are stored in the memory from the location 100 to 109
-//   or 0x0064 to 0x006D. The instructions are stored from the location
-//   0 to 15 or 0x0000 to 0x000F. The instructions are as follows:
+//   The 10 numbers are stored in the memory from the location 50 to 59
+//   or 0x32 to 0x3B. The instructions are stored from the location
+//   0 to 15 or 0x00 to 0x0F. The instructions are as follows:
 //
 //  |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|
 //  | Address |    Instruction   |          Remark          |   16-bit  representation  |
 //  |+++++++++|++++++++++++++++++|++++++++++++++++++++++++++|+++++++++++++++++++++++++++|
-//
+//  | 0x00    | LD R0,R1,50      | R1 <= M[R0 + 50]         | 001 000 001 0110010       |  keeping 1st number in R1
+//  | 0x01    | ADDi R0,R2,1     | R2 <= R0 + 1             | 101 000 010 0000001       |  R2 is the increment counter
+//  | 0X02    | ADDi R0,R5,10    | R5 <= R0 + 10            | 101 000 101 0001010       |  R5 is 10 - used to terminate the loop
+//  | 0x03    | LD R2,R3,50      | R3 <= M[R2 + 50]         | 001 010 011 0110010       |  R3 is the number to be compared in R3
+//  | 0x04    | SLT R1,R3,R4     | R4 <= R1 < R3            | 000 001 011 100 0111      |  
+//  | 0x05    | BEQ R4,R0,0x02   | If R4 == R0; PC <= PC+2  | 011 100 000 0000010       |  if R1 < R3, then R1 = R3
+//  | 0x06    | LD R2,R1,50      | R1 <= M[R2 + 50]         | 001 010 001 0110010       |  
+//  | 0x07    | ADDi R2,R2,1     | R2 <= R2 + 1             | 101 010 010 0000001       |
+//  | 0x08    | LD R2,R3,50      | R3 <= M[R2 + 50]         | 001 010 011 0110010       |
+//  | 0x09    | BEQ R2,R5,0x02   | If R2 == R5; PC <= PC+2  | 011 010 101 0000010       |  if R2 == 10, then terminate the loop
+//  | 0x0A    | J 0x04           | PC <= 0x04               | 100 0000000000100         |
+//  | 0x0B    | END              | End of the program       | 111 0000000000000         |

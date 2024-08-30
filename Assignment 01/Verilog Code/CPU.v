@@ -26,8 +26,8 @@ module CPU (
 
     // Opcode definitions
     parameter R     = 3'b000;
-    parameter LW    = 3'b001;
-    parameter SW    = 3'b010;
+    parameter LD    = 3'b001;
+    parameter SD    = 3'b010;
     parameter BEQ   = 3'b011;
     parameter J     = 3'b100; 
     parameter ADDi  = 3'b101;
@@ -96,8 +96,8 @@ module CPU (
             4'd0: nextstate = 4'd1; 
             4'd1: begin
                 case(opcode)
-                    LW  : nextstate = 4'd2;
-                    SW  : nextstate = 4'd2;
+                    LD  : nextstate = 4'd2;
+                    SD  : nextstate = 4'd2;
                     R   : nextstate = 4'd6;
                     BEQ : nextstate = 4'd8;
                     J   : nextstate = 4'd9;
@@ -106,7 +106,7 @@ module CPU (
                     default: nextstate = 4'd6;
                 endcase
             end 
-            4'd2 : nextstate = (opcode==LW) ? 4'd3 : 4'd5;
+            4'd2 : nextstate = (opcode==LD) ? 4'd3 : 4'd5;
             4'd3 : nextstate = 4'd4;
             4'd4 : nextstate = 4'd0;
             4'd5 : nextstate = 4'd0;
