@@ -63,14 +63,14 @@ module DataPath (
 
     initial PC = 0; //start the PC at 0
 
-    assign MemoryAddress = IorD ? ALUOut : IR[6:0];     // Select the memory address                                              
+    assign MemoryAddress    = IorD ? ALUOut : IR[6:0];  // Select the memory address
+    assign SignExtendOffset = {{9{IR[15]}},IR[6:0]};    // Sign-extend the offset                                              
     assign opcode    = IR[15:13];                       // get the opcode from the IR
     assign Writereg  = RegDst ? IR[6:4]: IR[9:7];       // Get the write register number
     assign Writedata = MemtoReg ? MDR : ALUOut;         // Get the data to write to the register
-    assign SignExtendOffset = {{9{IR[15]}},IR[6:0]};    // Sign-extend the offset
     assign PCOffset  = SignExtendOffset;                // The offset for a branch
     assign ALUAin    = ALUSrcA ? A : PC;                // Select the A input to the ALU
-    assign JumpAddr  = {PC[15], IR[12:0],2'b0};         // The jump address
+    assign JumpAddr  = {PC[15:13], IR[12:0]};           // The jump address
 
     blk_mem_gen_0 Memory (
         .clka(clock),
@@ -102,7 +102,7 @@ module DataPath (
             2'b00: ALUBin = B;                  // Register B
             2'b01: ALUBin = 16'd1;              // Constant 1
             2'b10: ALUBin = SignExtendOffset;   // Sign-extended offset
-            2'b11: ALUBin = PCOffset;           // Sign-extended offset << 2
+            2'b11: ALUBin = PCOffset;           // Sign-extended offset 
         endcase
     end
 
@@ -139,12 +139,14 @@ module DataPath (
             IR      <= 0;       // Reset the instruction register
         end
         else begin
-            A <= ReadData1;                         // Read data from register 1
-            B <= ReadData2;                         // Read data from register 2
+            A <= ReadData1;     // Read data from register 1
+            B <= ReadData2;     // Read data from register 2
+
+            MDR     <= MemOut;         // Always save the memory read value
+            ALUOut  <= ALUResultOut;   // Save the ALU result for use on a later clock cycle
+            
             if (MemWrite) Memory[ALUOut] <= B;      // Write to memory if MemWrite
-            ALUOut <= ALUResultOut;                 // Save the ALU result for use on a later clock cycle
-            if (IRWrite) IR <= MemOut;              // Write the IR if an instruction fetch 
-            MDR <= MemOut;                          // Always save the memory read value
+            if (IRWrite)  IR <= MemOut;             // Write the IR if an instruction fetch is enabled
             if (PCWrite || (PCWriteCond & Zero)) PC <= PCValue;     // Update the PC if a write is enabled
         end
     end 
