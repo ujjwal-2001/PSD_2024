@@ -21,7 +21,7 @@
 // 8. Select ALU inputs based on ALU source control signals
 // 9. Generate the opcode from the instruction register
 // The module is synchronous and updates the components on the positive edge of the clock signal.
-//--------------------------------------------------------------------------------------------------------//
+//------------------------------------------------------------------------------------------------------//
 // `include "ALU.v"
 // `include "RegisterFile.v"
 // `include "ALUControl.v"

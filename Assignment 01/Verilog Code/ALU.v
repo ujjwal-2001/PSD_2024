@@ -7,15 +7,11 @@
 // Topic        :   16-bit Multi-cycle Processor
 // ===================================================//
 
-//--------------DESCRIPTION----------------//
-// This is a 16-bit ALU module that performs
-// arithmetic and logical operations on two
-// 16-bit inputs A and B. The operation to be
-// performed is determined by the 4-bit control
-// signal ALUctl. The output of the ALU is
-// ALUResultOut, which is also 16 bits. The Zero output
-// is true if ALUResultOut is 0.
-//-----------------------------------------//
+//--------------------------------------------DESCRIPTION---------------------------------------------//
+// This is a 16-bit ALU module that performs arithmetic and logical operations on two 16-bit inputs 
+// A and B. The operation to be performed is determined by the 4-bit control signal ALUctl. The output 
+// of the ALU is ALUResultOut, which is also 16 bits. The Zero output is true if ALUResultOut is 0.
+//----------------------------------------------------------------------------------------------------//
 
 module ALU (
     input [3:0] ALUCtl,             // Control signal
@@ -24,10 +20,10 @@ module ALU (
     output Zero                     // Zero flag
     );
 
-    parameter [3:0] ADD = 4'b0010;
     parameter [3:0] SUBTRACT = 4'b0110;
+    parameter [3:0] ADD = 4'b0010;
     parameter [3:0] AND = 4'b0000;
-    parameter [3:0] OR = 4'b0001;
+    parameter [3:0] OR  = 4'b0001;
     parameter [3:0] NOR = 4'b1100;
     parameter [3:0] SLT = 4'b0111;
 
@@ -36,12 +32,12 @@ module ALU (
     always @(ALUCtl, A, B) begin 
         case (ALUCtl)               // Perform operation based on ALUctl
             ADD: ALUResultOut = A + B;
-            SUBTRACT: ALUResultOut = A - B;
             AND: ALUResultOut = A & B;
-            OR: ALUResultOut = A | B;
+            OR: ALUResultOut  = A | B;
             NOR: ALUResultOut = ~(A | B);
             SLT: ALUResultOut = (A < B) ? 1 : 0;
-            default: ALUResultOut = A + B;
+            SUBTRACT: ALUResultOut = A - B;
+            default: ALUResultOut  = A + B;
         endcase
     end
 
