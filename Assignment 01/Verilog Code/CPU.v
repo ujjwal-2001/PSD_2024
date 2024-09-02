@@ -19,9 +19,9 @@
 // `include "DataPath.v"
 
 module CPU (
-    input clock,    // Clock signal
-    input reset     // Reset signal
-    output reg1,    // Register 1 address
+    input clock,        // Clock signal
+    input reset,        // Reset signal
+    output [15:0] reg1  // Register 1 address
     );
 
     // Opcode definitions
@@ -67,33 +67,37 @@ module CPU (
     assign IorD         = (state==3) | (state==5); 
     assign MemRead      = (state==0) | (state==3);
     assign MemWrite     = (state==5);
-    assign IRWrite      = (state==0);
+    assign IRWrite      = (state==13);
     assign MemtoReg     = (state==4);
-    assign PCSource     = {(state==9), (state==8)}; 
-    assign ALUOp        = {(state==6), (state==8)}; 
-    assign ALUSrcB      = {(state==1) | (state==2) | (state=10), (state==1) | (state==0)};
+    assign PCSource[1]  = (state==9);
+    assign PCSource[0]  = (state==8); 
+    assign ALUOp[1]     = (state==6);
+    assign ALUOp[0]     = (state==8); 
+    assign ALUSrcB[1]   = (state==1) | (state==2) | (state==10);
+    assign ALUSrcB[0]   = (state==1) | (state==0);
     assign ALUSrcA      = (state==2) | (state==6) | (state==8) | (state==10);
     assign RegWrite     = (state==4) | (state==7) | (state==11);
     assign RegDst       = (state==7);
 
     // Next state logic
     // The state machine sequences the operations based on the opcode
-    // State 0: Fetch instruction
-    // State 1: Decode instruction
-    // State 2: Memory address calculation
-    // State 3: Memory access for load
-    // State 4: Write data to memory
-    // State 5: Memory access for store
-    // State 6: Execute R-type instruction
-    // State 7: R-type instruction computation
-    // State 8: Branch completion
-    // State 9: Jump completion
+    // State 0 : Instruction read
+    // State 13: instruction fetch
+    // State 1 : Decode instruction
+    // State 2 : Memory address calculation
+    // State 3 : Memory access for load
+    // State 4 : Write data to memory
+    // State 5 : Memory access for store
+    // State 6 : Execute R-type instruction
+    // State 7 : R-type instruction computation
+    // State 8 : Branch completion
+    // State 9 : Jump completion
     // State 10: ADDi execution
     // State 11: ADDi completion
     // state 12: End
     always@(*)begin
         case(state)
-            4'd0: nextstate = 4'd1; 
+            4'd0: nextstate = 4'd13; 
             4'd1: begin
                 case(opcode)
                     LD  : nextstate = 4'd2;
@@ -117,12 +121,13 @@ module CPU (
             4'd10: nextstate = 4'd11;
             4'd11: nextstate = 4'd0;
             4'd12: nextstate = 4'd12;
+            4'd13: nextstate = 4'd1;
             default: nextstate = 4'd1;            
         endcase
     end
 
     // Update the state on the positive edge of the clock
-    always @(posedge clock) begin 
+    always @(posedge clock, posedge reset) begin 
         if(reset) state <= 4'd0;
         else state <= nextstate;
     end

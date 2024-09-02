@@ -17,7 +17,7 @@
 module TOP(
     input clock100Mhz,  // 100 Mhz clock source on Basys 3 FPGA
     input reset,        // reset
-    input clock,        // Clock signal
+    input clock         // Clock signal
     );
 
     wire [15:0] displayedNum;  // input data to be displayed

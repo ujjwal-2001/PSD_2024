@@ -42,11 +42,11 @@ module DataPath (
     input ALUSrcA,          // ALU register A input control
     input clock,            // Clock signal
     input reset,            // Reset signal
-    output [2:0] opcode     // Opcode output
+    output [2:0] opcode,    // Opcode output
     output [15:0] R1        // Register 1 output
     );
 
-    reg [15:0] PC, Memory[0:1023];          // Program counter and memory
+    reg [15:0] PC;                          // Program counter and memory
     reg [15:0] MDR, IR;                     // Memory data register and instruction register
     reg [15:0] ALUOut;                      // ALU output
     reg [15:0] PCValue, ALUBin;             // PC value and ALU B input
@@ -61,13 +61,11 @@ module DataPath (
     wire Zero;                              // ALU zero flag output        
     wire[2:0] Writereg;                     // Write register address
 
-    initial PC = 0; //start the PC at 0
-
-    assign MemoryAddress    = IorD ? ALUOut : IR[6:0];  // Select the memory address
-    assign SignExtendOffset = {{9{IR[15]}},IR[6:0]};    // Sign-extend the offset                                              
+    assign MemoryAddress    = IorD ? ALUOut : PC;       // Select the memory address
+    assign SignExtendOffset = {{9{IR[6]}},IR[6:0]};     // Sign-extend the offset                                              
     assign opcode    = IR[15:13];                       // get the opcode from the IR
     assign Writereg  = RegDst ? IR[6:4]: IR[9:7];       // Get the write register number
-    assign Writedata = MemtoReg ? MDR : ALUOut;         // Get the data to write to the register
+    assign Writedata = MemtoReg ? MemOut : ALUOut;      // Get the data to write to the register
     assign PCOffset  = SignExtendOffset;                // The offset for a branch
     assign ALUAin    = ALUSrcA ? A : PC;                // Select the A input to the ALU
     assign JumpAddr  = {PC[15:13], IR[12:0]};           // The jump address
@@ -128,7 +126,7 @@ module DataPath (
     ); 
 
     // The clock-triggered actions of the datapath
-    always @(posedge clock) begin 
+    always @(posedge clock, posedge reset) begin 
 
         if (reset) begin
             PC      <= 0;       // Reset the PC
@@ -145,7 +143,6 @@ module DataPath (
             MDR     <= MemOut;         // Always save the memory read value
             ALUOut  <= ALUResultOut;   // Save the ALU result for use on a later clock cycle
             
-            if (MemWrite) Memory[ALUOut] <= B;      // Write to memory if MemWrite
             if (IRWrite)  IR <= MemOut;             // Write the IR if an instruction fetch is enabled
             if (PCWrite || (PCWriteCond & Zero)) PC <= PCValue;     // Update the PC if a write is enabled
         end
