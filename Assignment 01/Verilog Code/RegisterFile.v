@@ -34,7 +34,7 @@ module RegisterFile (
     assign R1 = RF[1];
 
     // Write data to a register if RegWrite is high
-    always@(posedge clock, posedge reset)begin
+    always@(posedge clock)begin
 
         if(reset)begin
             RF[0] <= 16'b0; 

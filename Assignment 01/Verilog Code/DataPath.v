@@ -36,7 +36,9 @@ module DataPath (
     input MemWrite,         // Memory write control
     input IorD,             // Memory address control
     input RegWrite,         // Register write control
+    input IPRWrite,         // Instruction Prefetch Register write control
     input IRWrite,          // Instruction Register write control
+    input IRSrc,            // Instruction Register source control
     input PCWrite,          // PC write control
     input PCWriteCond,      // Conditional PC write control
     input ALUSrcA,          // ALU register A input control
@@ -47,7 +49,9 @@ module DataPath (
     );
 
     reg [15:0] PC;                          // Program counter and memory
-    reg [15:0] MDR, IR;                     // Memory data register and instruction register
+    // reg [15:0] MDR;                         // Memory data register
+    reg [15:0] IPR;                         // Instruction Prefetch register
+    reg [15:0] IR;                          // Instruction register
     reg [15:0] ALUOut;                      // ALU output
     reg [15:0] PCValue, ALUBin;             // PC value and ALU B input
     reg [15:0] A, B;                        // Register A and B
@@ -58,7 +62,8 @@ module DataPath (
     wire [15:0] JumpAddr, MemOut;           // Jump address and memory output
     wire [15:0] Writedata, ALUAin;          // Write data and ALU input A
     wire [3:0] ALUCtl;                      // ALU control bits
-    wire Zero;                              // ALU zero flag output        
+    wire Zero;                              // ALU zero flag output 
+    wire PCWriteEn;                         // PC write enable       
     wire[2:0] Writereg;                     // Write register address
 
     assign MemoryAddress    = IorD ? ALUOut : PC;       // Select the memory address
@@ -69,6 +74,7 @@ module DataPath (
     assign PCOffset  = SignExtendOffset;                // The offset for a branch
     assign ALUAin    = ALUSrcA ? A : PC;                // Select the A input to the ALU
     assign JumpAddr  = {PC[15:13], IR[12:0]};           // The jump address
+    assign PCWriteEn = PCWrite || (PCWriteCond & Zero); // Enable the PC write if either control signal is high
 
     blk_mem_gen_0 Memory (
         .clka(clock),
@@ -126,25 +132,32 @@ module DataPath (
     ); 
 
     // The clock-triggered actions of the datapath
-    always @(posedge clock, posedge reset) begin 
+    always @(posedge clock) begin 
 
         if (reset) begin
             PC      <= 0;       // Reset the PC
             A       <= 0;       // Reset register A
             B       <= 0;       // Reset register B
-            MDR     <= 0;       // Reset the memory data register
+            // MDR     <= 0;       // Reset the memory data register
             ALUOut  <= 0;       // Reset the ALU output
             IR      <= 0;       // Reset the instruction register
+            IPR     <= 0;       // Reset instruction prefetch register
         end
         else begin
             A <= ReadData1;     // Read data from register 1
             B <= ReadData2;     // Read data from register 2
-
-            MDR     <= MemOut;         // Always save the memory read value
+            // MDR     <= MemOut;         // Always save the memory read value
             ALUOut  <= ALUResultOut;   // Save the ALU result for use on a later clock cycle
             
-            if (IRWrite)  IR <= MemOut;             // Write the IR if an instruction fetch is enabled
-            if (PCWrite || (PCWriteCond & Zero)) PC <= PCValue;     // Update the PC if a write is enabled
+            IPR <= (IPRWrite)? MemOut : IPR;                // Write the IPR if an instruction fetch is enabled 
+            PC  <= (PCWriteEn)? PCValue : PC;               // Update the PC if a write is enabled
+            
+            if (IRWrite) begin
+                IR <= (IRSrc)? IPR : MemOut; // Write the IR if an instruction fetch is enabled according to the source
+            end
+            else begin
+                IR <= IR; // Keep the IR the same
+            end 
         end
     end 
 

@@ -39,7 +39,7 @@ module CPU (
     wire RegDst, MemRead, MemWrite;         // Control signals
     wire  IorD, RegWrite, IRWrite;          // Control signals
     wire  PCWrite, PCWriteCond, ALUSrcA;    // Control signals
-    wire  IRWwrite, MemtoReg;               // Control signals
+    wire  MemtoReg, IPRWrite, IRSrc;        // Control signals
 
     DataPath DP (                // DataPath module instance
         .ALUOp(ALUOp), 
@@ -52,6 +52,8 @@ module CPU (
         .IorD(IorD), 
         .RegWrite(RegWrite), 
         .IRWrite(IRWrite),
+        .IPRWrite(IPRWrite),
+        .IRSrc(IRSrc),
         .PCWrite(PCWrite), 
         .PCWriteCond(PCWriteCond), 
         .ALUSrcA(ALUSrcA), 
@@ -62,19 +64,21 @@ module CPU (
     );
     
     // Control signals based on state and opcode
-    assign PCWrite      = (state==0) | (state==9);
+    assign PCWrite      = (state==0) | (state==9) | (state==14);
     assign PCWriteCond  = (state==8); 
     assign IorD         = (state==3) | (state==5); 
-    assign MemRead      = (state==0) | (state==3);
+    assign MemRead      = (state==0) | (state==3) | (state==2) | (state==6) | (state==10);
     assign MemWrite     = (state==5);
-    assign IRWrite      = (state==13);
+    assign IRSrc        = (state==14);
+    assign IPRWrite     = (state==3) | (state==5) | (state==7) | (state==11);
+    assign IRWrite      = (state==13)| (state==14) ;
     assign MemtoReg     = (state==4);
     assign PCSource[1]  = (state==9);
     assign PCSource[0]  = (state==8); 
     assign ALUOp[1]     = (state==6);
     assign ALUOp[0]     = (state==8); 
     assign ALUSrcB[1]   = (state==1) | (state==2) | (state==10);
-    assign ALUSrcB[0]   = (state==1) | (state==0);
+    assign ALUSrcB[0]   = (state==1) | (state==0) | (state==14);
     assign ALUSrcA      = (state==2) | (state==6) | (state==8) | (state==10);
     assign RegWrite     = (state==4) | (state==7) | (state==11);
     assign RegDst       = (state==7);
@@ -82,7 +86,6 @@ module CPU (
     // Next state logic
     // The state machine sequences the operations based on the opcode
     // State 0 : Instruction read
-    // State 13: instruction fetch
     // State 1 : Decode instruction
     // State 2 : Memory address calculation
     // State 3 : Memory access for load
@@ -95,6 +98,8 @@ module CPU (
     // State 10: ADDi execution
     // State 11: ADDi completion
     // state 12: End
+    // State 13: Instruction write via memory
+    // state 14: Instruction write via IPR
     always@(*)begin
         case(state)
             4'd0: nextstate = 4'd13; 
@@ -112,22 +117,23 @@ module CPU (
             end 
             4'd2 : nextstate = (opcode==LD) ? 4'd3 : 4'd5;
             4'd3 : nextstate = 4'd4;
-            4'd4 : nextstate = 4'd0;
-            4'd5 : nextstate = 4'd0;
+            4'd4 : nextstate = 4'd14;
+            4'd5 : nextstate = 4'd14;
             4'd6 : nextstate = 4'd7;
-            4'd7 : nextstate = 4'd0;
+            4'd7 : nextstate = 4'd14;
             4'd8 : nextstate = 4'd0;
             4'd9 : nextstate = 4'd0;
             4'd10: nextstate = 4'd11;
-            4'd11: nextstate = 4'd0;
+            4'd11: nextstate = 4'd14;
             4'd12: nextstate = 4'd12;
             4'd13: nextstate = 4'd1;
+            4'd14: nextstate = 4'd1;
             default: nextstate = 4'd1;            
         endcase
     end
 
     // Update the state on the positive edge of the clock
-    always @(posedge clock, posedge reset) begin 
+    always @(posedge clock) begin 
         if(reset) state <= 4'd0;
         else state <= nextstate;
     end
