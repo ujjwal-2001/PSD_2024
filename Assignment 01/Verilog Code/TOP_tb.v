@@ -18,20 +18,14 @@
 
 module TOP_tb();
 
-    // reg clock100Mhz;  // 100 Mhz clock source on Basys 3 FPGA
     reg reset;        // reset
     reg clock;        // Clock signal
-    wire [15:0] r1;    // Register 1 value
-    // wire [3:0] anode;  // anode signals of the 7-segment LED display
-    // wire [6:0] LEDOut; // cathode patterns of the 7-segment LED display
+    wire [15:0] r1;   // Register 1 value
 
     TOP TOP (
-        // .clock100Mhz(clock100Mhz), 
         .reset(reset), 
         .clock(clock),
         .r1(r1)
-        // .anode(anode),
-        // .LEDOut(LEDOut)
     );
 
     initial begin
@@ -44,10 +38,7 @@ module TOP_tb();
     always begin
         #5 clock = ~clock;
     end
-    
-    // always begin
-    //     #5 clock100Mhz = ~clock100Mhz; // 
-    // end
+
 endmodule
 
 //=================Instructions in instructions.coe file=================//

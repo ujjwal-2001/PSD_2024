@@ -22,9 +22,6 @@
 // 9. Generate the opcode from the instruction register
 // The module is synchronous and updates the components on the positive edge of the clock signal.
 //------------------------------------------------------------------------------------------------------//
-// `include "ALU.v"
-// `include "RegisterFile.v"
-// `include "ALUControl.v"
 
 module DataPath ( 
     input [1:0] ALUOp,      // ALU operation control
@@ -48,8 +45,7 @@ module DataPath (
     output [15:0] R1        // Register 1 output
     );
 
-    reg [15:0] PC;                          // Program counter and memory
-    // reg [15:0] MDR;                         // Memory data register
+    reg [15:0] PC;                          // Program counter
     reg [15:0] IPR;                         // Instruction Prefetch register
     reg [15:0] IR;                          // Instruction register
     reg [15:0] ALUOut;                      // ALU output
@@ -138,7 +134,6 @@ module DataPath (
             PC      <= 0;       // Reset the PC
             A       <= 0;       // Reset register A
             B       <= 0;       // Reset register B
-            // MDR     <= 0;       // Reset the memory data register
             ALUOut  <= 0;       // Reset the ALU output
             IR      <= 0;       // Reset the instruction register
             IPR     <= 0;       // Reset instruction prefetch register
@@ -146,11 +141,10 @@ module DataPath (
         else begin
             A <= ReadData1;     // Read data from register 1
             B <= ReadData2;     // Read data from register 2
-            // MDR     <= MemOut;         // Always save the memory read value
-            ALUOut  <= ALUResultOut;   // Save the ALU result for use on a later clock cycle
-            
-            IPR <= (IPRWrite)? MemOut : IPR;                // Write the IPR if an instruction fetch is enabled 
-            PC  <= (PCWriteEn)? PCValue : PC;               // Update the PC if a write is enabled
+
+            ALUOut <= ALUResultOut;                 // Save the ALU result for use on a later clock cycle
+            IPR    <= (IPRWrite)? MemOut : IPR;     // Write the IPR if an instruction fetch is enabled 
+            PC     <= (PCWriteEn)? PCValue : PC;    // Update the PC if a write is enabled
             
             if (IRWrite) begin
                 IR <= (IRSrc)? IPR : MemOut; // Write the IR if an instruction fetch is enabled according to the source

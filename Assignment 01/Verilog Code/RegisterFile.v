@@ -26,7 +26,7 @@ module RegisterFile (
     output [15:0] R1
     );
     
-    reg [15:0] RF [7:0]; // 8 16-bit registers
+    reg [15:0] RF [7:0]; // 8, 16-bit registers
 
     // Read data from registers
     assign Data1 = RF[Read1];   

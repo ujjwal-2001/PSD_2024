@@ -16,8 +16,6 @@
 // the clock signal.
 //--------------------------------------------------------------------------------------------------------//
 
-// `include "DataPath.v"
-
 module CPU (
     input clock,        // Clock signal
     input reset,        // Reset signal

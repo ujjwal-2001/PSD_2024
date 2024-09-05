@@ -15,30 +15,15 @@
 //--------------------------------------------------------------------------------------------------------//
 
 module TOP(
-    // input clock100Mhz,  // 100 Mhz clock source on Basys 3 FPGA
     input reset,        // reset
     input clock,        // Clock signal
     output [15:0] r1    // Register 1 value
-    // output [3:0] anode, // anode signals of the 7-segment LED display
-    // output [6:0] LEDOut // cathode patterns of the 7-segment LED display
     );
-
-    // wire [15:0] displayedNum;  // input data to be displayed
-
-    // assign r1 = displayedNum;
 
     CPU CPU (
         .clock(clock), 
         .reset(reset), 
         .reg1(r1)
     );
-
-    // BCD7Segment BCD7Segment (
-    //     .clock100Mhz(clock100Mhz), 
-    //     .reset(reset), 
-    //     .displayedNum(displayedNum),
-    //     .anode(anode),
-    //     .LEDOut(LEDOut)
-    // );
 
 endmodule
