@@ -9,9 +9,8 @@
 
 //--------------------------------------------DESCRIPTION-----------------------------------------------//
 // This is a testbench module for the 16-bit Multi-cycle Processor. The momory contains an array of 10 numbers
-// and set of instructions that determines the maximum amoung them and displays it on the BCD7Segment display.
+// and set of instructions that determines the maximum amoung them and displays it on the 16-LEDs.
 // The testbench module instantiates the TOP module and provides the clock and reset signals to the module.
-// The module also provides the input data to the CPU module and the clock signal to the BCD7Segment module.
 //--------------------------------------------------------------------------------------------------------//
 
 `timescale 1ns / 1ps
