@@ -9,7 +9,7 @@
 
 //--------------------------------------------DESCRIPTION-----------------------------------------------//
 // This is a datapath module that contains the main components of a MIPS processor. The module contains
-// a program counter (PC), memory, memory data register (MDR), instruction register (IR), ALU, register
+// a program counter (PC), memory, instruction register (IR), instruction prefetch register (IPR), ALU, register
 // file, and ALU control unit. The module performs the following operations:
 // 1. Read data from the register file
 // 2. Write data to the register file
