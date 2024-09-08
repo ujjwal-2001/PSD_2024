@@ -29,36 +29,42 @@ The design was tested by implementing an algorithm to find the maximum number fr
 The instruction set supported by the processor is a limited subset, sufficient for basic arithmetic, logical operations, and control flow mechanisms like branching. 
 
 #### Instruction Format
-<img src="/Assignment 01/Assets/instruction format.pdf" alt="Instruction Format" width="500"/>
+<img src="./Assets/instruction_format.png" alt="Instruction Format" width="500"/>
 
 The ALU control inputs for different instructions, based on their ALUOp and operation types, are listed in Table 1.
 
 #### Table 1: ALU Control Signals for Instructions
 
-| Instruction | ALUOp  | Operation | ALU Control Input |
-| ----------- | ------ | --------- | ----------------- |
-| ADD         | 00     | Addition  | 010               |
-| SUB         | 01     | Subtract  | 110               |
-| AND         | 10     | AND       | 000               |
-| OR          | 10     | OR        | 001               |
-| SLT         | 10     | Set on Less Than | 111        |
+| Op Code     | ALUOp | Operation         | Function | Desired ALU action   | ALU Control input |
+|-------------|-------|-------------------|----------|----------------------|-------------------|
+| load (001)  | 00    | load data          | xxxx     | add                  | 0010              |
+| store (010) | 00    | store data         | xxxx     | add                  | 0010              |
+| BEQ (011)   | 01    | branch if equal    | xxxx     | subtract             | 0110              |
+| R-type (000)| 10    | add                | 0010     | add                  | 0010              |
+| R-type (000)| 10    | subtract           | 0110     | subtract             | 0110              |
+| R-type (000)| 10    | OR                 | 0001     | or                   | 0001              |
+| R-type (000)| 10    | NOR                | 1100     | nor                  | 1100              |
+| R-type (000)| 10    | SLT                | 0111     | set on less than     | 0111              |
+| R-type (000)| 10    | AND                | 0000     | and                  | 0000              |
+| ADDi (101)  | 00    | add immediate      | xxxx     | add                  | 0010              |
+
 
 ### Data-Path Design
 
 The datapath design for the 16-bit processor was constructed using a multi-cycle approach. This means that each instruction is executed over multiple clock cycles, with each stage of execution happening in a distinct phase. 
 
 #### Level 0 Data-path Schematic
-<img src="path-to-your-image/level-0-datapath.png" alt="Level 0 Data-path" width="500"/>
+<img src="./Assets/Level_0.png" alt="Level 0 Data-path" width="500"/>
 
 #### Level 1 Data-path Schematic
-<img src="path-to-your-image/level-1-datapath.png" alt="Level 1 Data-path" width="500"/>
+<img src="./Assets/Level_1.png" alt="Level 1 Data-path" width="800"/>
 
 ### Finite State Machine (FSM) Design
 
 The Finite State Machine (FSM) design controls the sequence of operations that occur within the datapath during instruction execution.
 
 #### FSM State Diagram
-<img src="path-to-your-image/fsm-state-diagram.png" alt="FSM State Diagram" width="500"/>
+<img src="./Assets/FSM.png" alt="FSM State Diagram" width="500"/>
 
 ## Implementation
 
@@ -83,15 +89,21 @@ The testbench developed for this processor verifies its correct operation by sim
 | 0x0A    | J 0x04               | PC ← 0x04                         | 100 0000000000100      |
 | 0x0B    | END                  | End of program                    | 111 0000000000000      |
 
+#### Figure 7: Waveform
+<img src="./Assets/Utilization_report.png" alt="Power Report" width="700"/>
+
 ### Reports
 
 The timing report from the FPGA synthesis tool confirmed that all setup and hold times were met, and there were no timing violations at 10ns clock period.
 
-#### Figure 7: Timing Report
-<img src="./Assets/" alt="Timing Report" width="500"/>
+#### Figure 8: Timing Report
+<img src="./Assets/time_report.png" alt="Timing Report" width="800"/>
 
-#### Figure 8: Power Report
-<img src="path-to-your-image/power-report.png" alt="Power Report" width="500"/>
+#### Figure 9: Power Report
+<img src="./Assets/power_report.png" alt="Power Report" width="700"/>
+
+#### Figure 10: Resource Utilization
+<img src="./Assets/Utilization_report.png" alt="Power Report" width="700"/>
 
 ## Conclusion
 
