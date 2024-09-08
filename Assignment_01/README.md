@@ -16,11 +16,11 @@
 6. [Implementation](#implementation)
    1. [Test Bench](#test-bench)
    2. [Test Program Instructions](#table-2-test-program-instructions)
-   3. [Waveform](#figure-7-waveform)
+   3. [Waveform](#figure-8-waveform)
 7. [Reports](#reports)
-   1. [Timing Report](#figure-8-timing-report)
-   2. [Power Report](#figure-9-power-report)
-   3. [Resource Utilization](#figure-10-resource-utilization)
+   1. [Timing Report](#figure-9-timing-report)
+   2. [Power Report](#figure-10-power-report)
+   3. [Resource Utilization](#figure-11-resource-utilization)
 8. [Conclusion](#conclusion)
 
 
@@ -102,20 +102,23 @@ The testbench developed for this processor verifies its correct operation by sim
 | 0x0A    | J 0x04               | PC ← 0x04                         | 100 0000000000100      |
 | 0x0B    | END                  | End of program                    | 111 0000000000000      |
 
-#### Figure 7: Waveform
+#### Figure 7: Flow-chart
+<img src="./Assets/flow_chart.png" alt="Power Report" width="600"/>
+
+#### Figure 8: Waveform
 <img src="./Assets/Utilization_report.png" alt="Power Report" width="1000"/>
 
 ### Reports
 
 The timing report from the FPGA synthesis tool confirmed that all setup and hold times were met, and there were no timing violations at 10ns clock period.
 
-#### Figure 8: Timing Report
+#### Figure 9: Timing Report
 <img src="./Assets/time_report.png" alt="Timing Report" width="1000"/>
 
-#### Figure 9: Power Report
+#### Figure 10: Power Report
 <img src="./Assets/power_report.png" alt="Power Report" width="600"/>
 
-#### Figure 10: Resource Utilization
+#### Figure 11: Resource Utilization
 <img src="./Assets/Utilization_report.png" alt="Power Report" width="1000"/>
 
 ## Conclusion
