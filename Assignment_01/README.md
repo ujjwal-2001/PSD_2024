@@ -1,18 +1,31 @@
 # Design and Implementation of a 16-bit Multi-Cycle Processor
-
-**Author**: Ujjwal Chaudhary, 22577  
 **Date**: Sept-2024
 
 ## Table of Contents
-- [Introduction](#introduction)
-- [Processor Design](#processor-design)
-  - [Instructions](#instructions)
-  - [Data-Path Design](#data-path-design)
-  - [Finite State Machine (FSM) Design](#finite-state-machine-fsm-design)
-- [Implementation](#implementation)
-  - [Test Bench](#test-bench)
-  - [Reports](#reports)
-- [Conclusion](#conclusion)
+1. [Author](#author)
+2. [Introduction](#introduction)
+3. [Processor Design](#processor-design)
+   1. [Instructions](#instructions)
+   2. [Instruction Format](#instruction-format)
+   3. [ALU Control Signals for Instructions](#table-1-alu-control-signals-for-instructions)
+4. [Data-Path Design](#data-path-design)
+   1. [Level 0 Data-path Schematic](#level-0-data-path-schematic)
+   2. [Level 1 Data-path Schematic](#level-1-data-path-schematic)
+5. [Finite State Machine (FSM) Design](#finite-state-machine-fsm-design)
+   1. [FSM State Diagram](#fsm-state-diagram)
+6. [Implementation](#implementation)
+   1. [Test Bench](#test-bench)
+   2. [Test Program Instructions](#table-2-test-program-instructions)
+   3. [Waveform](#figure-7-waveform)
+7. [Reports](#reports)
+   1. [Timing Report](#figure-8-timing-report)
+   2. [Power Report](#figure-9-power-report)
+   3. [Resource Utilization](#figure-10-resource-utilization)
+8. [Conclusion](#conclusion)
+
+
+## Author
+[UJJWAL CHAUDHARY](https://www.linkedin.com/in/ujjwal-chaudhary-4436701aa/), M. Tech. ESE 2023-25, IISc Bangalore
 
 ## Introduction
 
@@ -29,7 +42,7 @@ The design was tested by implementing an algorithm to find the maximum number fr
 The instruction set supported by the processor is a limited subset, sufficient for basic arithmetic, logical operations, and control flow mechanisms like branching. 
 
 #### Instruction Format
-<img src="./Assets/instruction_format.png" alt="Instruction Format" width="500"/>
+<img src="./Assets/instruction_format.png" alt="Instruction Format" width="650"/>
 
 The ALU control inputs for different instructions, based on their ALUOp and operation types, are listed in Table 1.
 
@@ -54,17 +67,17 @@ The ALU control inputs for different instructions, based on their ALUOp and oper
 The datapath design for the 16-bit processor was constructed using a multi-cycle approach. This means that each instruction is executed over multiple clock cycles, with each stage of execution happening in a distinct phase. 
 
 #### Level 0 Data-path Schematic
-<img src="./Assets/Level_0.png" alt="Level 0 Data-path" width="500"/>
+<img src="./Assets/Level_0.png" alt="Level 0 Data-path" width="400"/>
 
 #### Level 1 Data-path Schematic
-<img src="./Assets/Level_1.png" alt="Level 1 Data-path" width="800"/>
+<img src="./Assets/Level_1.png" alt="Level 1 Data-path" width="1000"/>
 
 ### Finite State Machine (FSM) Design
 
 The Finite State Machine (FSM) design controls the sequence of operations that occur within the datapath during instruction execution.
 
 #### FSM State Diagram
-<img src="./Assets/FSM.png" alt="FSM State Diagram" width="500"/>
+<img src="./Assets/FSM.png" alt="FSM State Diagram" width="1000"/>
 
 ## Implementation
 
@@ -90,20 +103,20 @@ The testbench developed for this processor verifies its correct operation by sim
 | 0x0B    | END                  | End of program                    | 111 0000000000000      |
 
 #### Figure 7: Waveform
-<img src="./Assets/Utilization_report.png" alt="Power Report" width="700"/>
+<img src="./Assets/Utilization_report.png" alt="Power Report" width="1000"/>
 
 ### Reports
 
 The timing report from the FPGA synthesis tool confirmed that all setup and hold times were met, and there were no timing violations at 10ns clock period.
 
 #### Figure 8: Timing Report
-<img src="./Assets/time_report.png" alt="Timing Report" width="800"/>
+<img src="./Assets/time_report.png" alt="Timing Report" width="1000"/>
 
 #### Figure 9: Power Report
-<img src="./Assets/power_report.png" alt="Power Report" width="700"/>
+<img src="./Assets/power_report.png" alt="Power Report" width="600"/>
 
 #### Figure 10: Resource Utilization
-<img src="./Assets/Utilization_report.png" alt="Power Report" width="700"/>
+<img src="./Assets/Utilization_report.png" alt="Power Report" width="1000"/>
 
 ## Conclusion
 
