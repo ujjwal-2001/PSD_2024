@@ -76,6 +76,8 @@ The datapath design for the 16-bit processor was constructed using a multi-cycle
 
 The Finite State Machine (FSM) design controls the sequence of operations that occur within the datapath during instruction execution.
 
+BRAM was used as the data and instruction memory. It reads the data with a latency of one clock cycle, thus after reading the instruction from the state S0 (we also calculate the next PC), we write the IR in next state (S13). We ccleverly use the execution states (S2, S6, and S10) to fetch instruction and store it in IPR, IR is further update in the state S14; this results in a reduction of one state for the next R-type, lode, store or ADDi instruction. 
+
 #### FSM State Diagram
 <img src="./Assets/FSM.png" alt="FSM State Diagram" width="1000"/>
 
