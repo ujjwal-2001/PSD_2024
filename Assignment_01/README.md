@@ -103,7 +103,7 @@ The testbench developed for this processor verifies its correct operation by sim
 | 0x0B    | END                  | End of program                    | 111 0000000000000      |
 
 #### Figure 7: Flow-chart
-<img src="./Assets/flow_chart.png" alt="Power Report" width="600"/>
+<img src="./Assets/flow_chart.png" alt="Power Report" width="300"/>
 
 #### Figure 8: Waveform
 <img src="./Assets/Utilization_report.png" alt="Power Report" width="1000"/>
