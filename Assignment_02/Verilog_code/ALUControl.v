@@ -38,12 +38,11 @@ module ALUControl (
             2'b01: ALUCtl = SUBTRACT;           // ALUOp is 01
             2'b10: begin
                 case (FuncCode)                 // ALUOp is 10
-                    4'b0000: ALUCtl = AND;
-                    4'b0001: ALUCtl = OR;
-                    4'b0111: ALUCtl = SLT;
-                    4'b1100: ALUCtl = NOR;
-                    4'b0110: ALUCtl = SUBTRACT;
-                    4'b0010: ALUCtl = ADD;
+                    4'b0000: ALUCtl = ADD;
+                    4'b1000: ALUCtl = SUBTRACT;
+                    4'b0111: ALUCtl = AND;
+                    4'b0110: ALUCtl = OR;
+                    4'b0001: ALUCtl = SLT;
                     default: ALUCtl = ADD;
                 endcase
             end
