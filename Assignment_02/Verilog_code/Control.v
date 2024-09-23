@@ -31,6 +31,13 @@ module Control
 //| beq         |    0   |     X     |     0     |     0    |     0     |    1   |    0   |    1   |
 //| jal         |    1   |     0     |     1     |     0    |     0     |    1   |    1   |    1   |
 
+    parameter R_TYPE  = 7'b0110011;
+    parameter I_TYPE1 = 7'b0000011;
+    parameter I_TYPE2 = 7'b0010011;
+    parameter S_TYPE  = 7'b0100011;
+    parameter SB_TYPE = 7'b1100111;
+    parameter U_TYPE  = 7'b0110111;
+    parameter UJ_TYPE = 7'b1101111;
 
     always @* begin
         case(opcode)
