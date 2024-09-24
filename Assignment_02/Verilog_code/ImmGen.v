@@ -41,7 +41,7 @@ module ImmGen(
     assign Immediate[18:12] = (opcode == U_TYPE || opcode == UJ_TYPE)? Instruction[18:12] : Instruction[31];
     assign Immediate[11]    = (opcode == UJ_TYPE)? Instruction[19] : (opcode == U_TYPE)? 1'b0 : Instruction[31];
     assign Immediate[10:5]  = (opcode == U_TYPE)? 6'b0 : Instruction[30:25];
-    assign Immediate[4:1]   = (opcode == U_TYPE)? 4'b0 : (opcode == S || opcode == SB)? Instruction[11:8] : Instruction[24:21];
-    assign Immediate[0]     = (opcode == U_TYPE)? 1'b0 : (opcode == S || opcode == SB)? Instruction[7] : Instruction[20];
+    assign Immediate[4:1]   = (opcode == U_TYPE)? 4'b0 : (opcode == S_TYPE || opcode == SB_TYPE)? Instruction[11:8] : Instruction[24:21];
+    assign Immediate[0]     = (opcode == U_TYPE)? 1'b0 : (opcode == S_TYPE || opcode == SB_TYPE)? Instruction[7] : Instruction[20];
 
 endmodule
