@@ -12,27 +12,27 @@
 //----------------------------------------------------------------------------------------------------//
 
 module ReadAlign(
-    input wire [31:0] DataIn,   // Data to be aligned
+    input wire [31:0] DataOut,   // Data to be aligned
     input wire [1:0] Address,   // Address LSBs
     input wire lb,lbu,          // Load byte, Load byte unsigned - Control signals
     input wire lh,lhu,          // Load halfword, Load halfword unsigned - Control signals
     input wire lw,              // Load word
-    output wire [31:0] DataOut  // Data aligned
+    output wire [31:0] ReadData  // Data aligned
 );
 
-    reg [31:0] AlignDataOut;
+    reg [31:0] AlignReadData;
     reg [7:0] Da7_0, Db7_0, Dc7_0;
     reg [7:0] Da15_8, Db15_8, Dc15_8;
     reg [7:0] Dc23_16;
 
-    assign DataOut = AlignDataOut;
+    assign ReadData = AlignReadData;
 
     always @(*)begin
         case(Address)
-            2'b00: Da7_0 = DataIn[7:0];
-            2'b01: Da7_0 = DataIn[15:8];
-            2'b10: Da7_0 = DataIn[23:16];
-            2'b11: Da7_0 = DataIn[31:24];
+            2'b00: Da7_0 = DataOut[7:0];
+            2'b01: Da7_0 = DataOut[15:8];
+            2'b10: Da7_0 = DataOut[23:16];
+            2'b11: Da7_0 = DataOut[31:24];
         endcase
 
         case({lb,lbu})
@@ -42,8 +42,8 @@ module ReadAlign(
         endcase
 
         case(Address[1])
-            1'b0: {Db15_8, Db7_0} = {DataIn[15:8], DataIn[7:0]};
-            1'b1: {Db15_8, Db7_0} = {DataIn[31:24], DataIn[23:16]}; 
+            1'b0: {Db15_8, Db7_0} = {DataOut[15:8], DataOut[7:0]};
+            1'b1: {Db15_8, Db7_0} = {DataOut[31:24], DataOut[23:16]}; 
             default: {Db15_8, Db7_0} = 16'b0;
         endcase
 
@@ -60,8 +60,8 @@ module ReadAlign(
         endcase
 
         case(lw)
-            1'b0: AlignDataOut = {Dc23_16, Dc23_16, Dc15_8, Dc7_0};
-            1'b1: AlignDataOut = DataIn;
+            1'b0: AlignReadData = {Dc23_16, Dc23_16, Dc15_8, Dc7_0};
+            1'b1: AlignReadData = DataOut;
         endcase
         
     end
