@@ -8,15 +8,17 @@
 // ===================================================//
 
 //--------------------------------------------DESCRIPTION---------------------------------------------//
-
+// This module aligns the data to be read from the memory. The data is aligned based on the address LSBs
+// and the control signals. The data is aligned in such a way that the data is read from the memory in
+// the correct order.
 //----------------------------------------------------------------------------------------------------//
 
 module ReadAlign(
     input wire [31:0] DataOut,   // Data to be aligned
-    input wire [1:0] Address,   // Address LSBs
-    input wire lb,lbu,          // Load byte, Load byte unsigned - Control signals
-    input wire lh,lhu,          // Load halfword, Load halfword unsigned - Control signals
-    input wire lw,              // Load word
+    input wire [1:0] Address,    // Address LSBs
+    input wire lb,lbu,           // Load byte, Load byte unsigned - Control signals
+    input wire lh,lhu,           // Load halfword, Load halfword unsigned - Control signals
+    input wire lw,               // Load word
     output wire [31:0] ReadData  // Data aligned
 );
 

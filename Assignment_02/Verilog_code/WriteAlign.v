@@ -8,14 +8,16 @@
 // ===================================================//
 
 //--------------------------------------------DESCRIPTION---------------------------------------------//
-
+// This module aligns the data to be written to the memory. The data is aligned based on the address LSBs
+// and the control signals. The data is aligned in such a way that the data is written to the memory in
+// the correct order.
 //----------------------------------------------------------------------------------------------------//
 
 module WriteAlign(
     input wire [31:0] WriteData,   // Data to be aligned
     input wire [1:0] Address,      // Address LSBs
     input wire sb,sh,sw,           // Store byte, Store halfword, Store word - Control signals
-    output wire we0,we1,we2,we3    // Write enable signals
+    output reg we0,we1,we2,we3,   // Write enable signals
     output wire [31:0] DataIn      // Data aligned
 );
 
