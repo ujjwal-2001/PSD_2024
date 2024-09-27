@@ -24,46 +24,62 @@
 
 module CPU(
     input wire clock,     // Clock
-    input wire reset,   // Reset
+    input wire reset,     // Reset
 );
 
-    wire Branch, MemRead, MemtoReg;                     // Control signals
-    wire [1:0] ALUOp;                                   // ALU operation code
-    wire [3:0] ALUCtl, FuncCode;                        // ALU control signal
+    wire Branch, Jump, RegDst;                          // Control signals
     wire MemWrite, ALUSrc, RegWrite;                    // Control signals
+    wire sw, sh, sb, lw, lh, lhu, lb, lbu;              // Control signals
+    wire [1:0] ALUOp, MemtoReg;                         // Control signals
+
+    wire [3:0] ALUCtl, FuncCode;                        // ALU control signal
+
     wire [31:0] PC, PCBranch, PCNext;                   // Program counter
+
     wire [31:0] Instruction;                            // Instruction
+    wire [4:0]  WriteReg;                               // Register
     wire [31:0] ReadData1, ReadData2, WriteData;        // Data
     wire [31:0] Immediate, B, ALUResult, ReadData;      // Data
-    wire zero;
-
-    assign B = (ALUSrc)? Immediate : ReadData2?                 // Select B
+    wire zero;                                          // Zero flag
+    
+    assign WriteReg  = (RegDst)? Instruction[19:15] : Instruction[11:7]; // Select WriteReg
+    assign WriteData = (MemtoReg[1])? Immediate : (MemtoReg[0])? ReadData : ALUResult; // Select WriteData
+    assign B = (ALUSrc)? Immediate : ReadData1?                 // Select B
     assign FuncCode  = {Instruction[30], Instruction[14:12]};   // Extract FuncCode
-    assign WriteData = (MemtoReg)? ReadData : ALUResult;        // Select WriteData
     assign PCBranch  = PC + Immediate;                          // Calculate PCBranch
-    assign PCNext    = (Branch & Zero)? PCBranch : (PC+1);      // Calculate PCNext
+    assign PCNext    = ((Branch & Zero) | Jump)? PCBranch : (PC+1);      // Calculate PCNext
 
-    always@(posedge clk)begin                             // Update PC
+    always@(posedge clock)begin                             // Update PC
         PC <= (reset)? 32'd0 : PCNext;   
     end
 
     dist_mem_gen_1 InstructionMem(        // Instruction memory
-        .a(PC);
-        .d(32'd0);
-        .clk(clk);
-        .we(1'b0);
+        .a(PC),
+        .d(32'd0),
+        .clk(clk),
+        .we(1'b0),
         .spo(Instruction)
     );
 
     Control ControlUnit(                // Control unit
-        .opcode(Instruction[6:0]);
-        .Branch(Branch);
-        .MemRead(MemRead);
-        .MemtoReg(MemtoReg);
-        .ALUOp(ALUOp);
-        .MemWrite(MemWrite);
-        .ALUSrc(ALUSrc);
-        .RegWrite(RegWrite);
+        .funct3(Instruction[14:12]),
+        .opcode(Instruction[6:0]),
+        .Branch(Branch),
+        .Jump(Jump),
+        .MemtoReg(MemtoReg),
+        .ALUOp(ALUOp),
+        .MemWrite(MemWrite),
+        .ALUSrc(ALUSrc),
+        .RegWrite(RegWrite),
+        .RegDst(RegDst),
+        .sw(sw),
+        .sh(sh),
+        .sb(sb),
+        .lw(lw),
+        .lh(lh),
+        .lhu(lhu),
+        .lb(lb),
+        .lbu(lbu),
     );
 
     RegisterFile RegFile(               // Register file
@@ -72,7 +88,7 @@ module CPU(
         .RegWrite(RegWrite);
         .ReadReg1(Instruction[19:15]);
         .ReadReg2(Instruction[24:20]);
-        .WriteReg(Instruction[11:7]);
+        .WriteReg(WriteReg);
         .WriteData(WriteData);
         .ReadData1(ReadData1);
         .ReadData2(ReadData2);
@@ -91,16 +107,25 @@ module CPU(
 
     ALU ALU(                            // ALU
         .ALUCtl(ALUCtl),
-        .A(ReadData1),
+        .A(ReadData2),
         .B(B),
         .ALUResult(ALUResult),
         .Zero(Zero)
     );
 
-    dist_mem_gen_1 DataMem(             // Data memory
-        .a(ALUResult);
-        .d(ReadData2);
-        .clk(clk);
-        .we(MemWrite);
-        .spo(ReadData);
+    DataMem DataMem(                    // Data memory
+        .clock(clock),
+        .Address(ALUResult),
+        .WriteData(ReadData1),
+        .MemWrite(MemWrite),
+        .sw(sw),
+        .sh(sh),
+        .sb(sb),
+        .lw(lw),
+        .lh(lh),
+        .lbu(lbu),
+        .lb(lb),
+        .ReadData(ReadData)
     );
+
+endmodule
