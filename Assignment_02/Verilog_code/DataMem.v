@@ -12,12 +12,12 @@
 //----------------------------------------------------------------------------------------------------//
 
 module DataMem(
-    input wire clock,           // Clock
-    input wire [11:0] Address,  // Address
-    input wire [31:0] WriteData,// Data to be written
-    input wire MemWrite,        // Write enable
-    input wire sw,sh,sb,        // Store word, Store halfword, Store byte - Control signals
-    input wire lw,lh,lbu,lb,lbu // Load word, Load halfword, Load halfword unsigned, Load byte - Control signals
+    input  wire clock,           // Clock
+    input  wire [11:0] Address,  // Address
+    input  wire [31:0] WriteData,// Data to be written
+    input  wire MemWrite,        // Write enable
+    input  wire sw,sh,sb,        // Store word, Store halfword, Store byte - Control signals
+    input  wire lw,lh,lbu,lb,lbu // Load word, Load halfword, Load halfword unsigned, Load byte - Control signals
     output wire [31:0] ReadData // Data to be read
 );
 

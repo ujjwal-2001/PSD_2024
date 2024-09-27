@@ -14,10 +14,10 @@
 //----------------------------------------------------------------------------------------------------//
 
 module WriteAlign(
-    input wire [31:0] WriteData,   // Data to be aligned
-    input wire [1:0] Address,      // Address LSBs
-    input wire sb,sh,sw,           // Store byte, Store halfword, Store word - Control signals
-    output reg we0,we1,we2,we3,   // Write enable signals
+    input  wire [31:0] WriteData,   // Data to be aligned
+    input  wire [1:0] Address,      // Address LSBs
+    input  wire sb,sh,sw,           // Store byte, Store halfword, Store word - Control signals
+    output reg  we0,we1,we2,we3,   // Write enable signals
     output wire [31:0] DataIn      // Data aligned
 );
 

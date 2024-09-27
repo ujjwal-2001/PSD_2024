@@ -18,7 +18,7 @@
 //----------------------------------------------------------------------------------------------------//
 
 module ImmGen(
-    input wire [31:0] Instruction,      // 32-bit instruction
+    input  wire [31:0] Instruction,      // 32-bit instruction
     output wire [31:0] Immediate        // 32-bit immediate
 );
 
