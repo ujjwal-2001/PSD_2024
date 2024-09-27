@@ -17,8 +17,8 @@ module WriteAlign(
     input  wire [31:0] WriteData,   // Data to be aligned
     input  wire [1:0] Address,      // Address LSBs
     input  wire sb,sh,sw,           // Store byte, Store halfword, Store word - Control signals
-    output reg  we0,we1,we2,we3,   // Write enable signals
-    output wire [31:0] DataIn      // Data aligned
+    output reg  we0,we1,we2,we3,    // Write enable signals
+    output wire [31:0] DataIn       // Data aligned
 );
 
     reg [8:0] D7_0, D15_8, D23_16, D31_24;

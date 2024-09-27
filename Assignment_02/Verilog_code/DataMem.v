@@ -8,7 +8,9 @@
 // ===================================================//
 
 //--------------------------------------------DESCRIPTION---------------------------------------------//
-
+// This module is the data memory of the 32-bit RISC-V single-cycle processor. The data memory is a 32-bit
+// memory that stores the data to be read and written. The data memory has four memory banks, each of which
+// stores 8 bits of data. Data is written and read in aligned manner.
 //----------------------------------------------------------------------------------------------------//
 
 module DataMem(
@@ -18,7 +20,7 @@ module DataMem(
     input  wire MemWrite,        // Write enable
     input  wire sw,sh,sb,        // Store word, Store halfword, Store byte - Control signals
     input  wire lw,lh,lbu,lb,lbu // Load word, Load halfword, Load halfword unsigned, Load byte - Control signals
-    output wire [31:0] ReadData // Data to be read
+    output wire [31:0] ReadData  // Data to be read
 );
 
     wire [31:0] DataIn;

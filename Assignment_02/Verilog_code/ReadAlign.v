@@ -19,7 +19,7 @@ module ReadAlign(
     input  wire lb,lbu,           // Load byte, Load byte unsigned - Control signals
     input  wire lh,lhu,           // Load halfword, Load halfword unsigned - Control signals
     input  wire lw,               // Load word
-    output wire [31:0] ReadData  // Data aligned
+    output wire [31:0] ReadData   // Data aligned
 );
 
     reg [31:0] AlignReadData;
