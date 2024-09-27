@@ -16,9 +16,8 @@ module DataMem(
     input wire [11:0] Address,  // Address
     input wire [31:0] WriteData,// Data to be written
     input wire MemWrite,        // Write enable
-    input wire MemRead,         // Read enable
     input wire sw,sh,sb,        // Store word, Store halfword, Store byte - Control signals
-    input wire lw,lh,lbu,lb,    // Load word, Load halfword, Load halfword unsigned, Load byte - Control signals
+    input wire lw,lh,lbu,lb,lbu // Load word, Load halfword, Load halfword unsigned, Load byte - Control signals
     output wire [31:0] ReadData // Data to be read
 );
 
@@ -32,10 +31,10 @@ module DataMem(
         .sb(sb),
         .sh(sh),
         .sw(sw),
-        .we0(we0),
-        .we1(we1),
-        .we2(we2),
-        .we3(we3),
+        .we0(MemWrite & we0),
+        .we1(MemWrite & we1),
+        .we2(MemWrite & we2),
+        .we3(MemWrite & we3),
         .DataIn(DataIn)
     );
 
