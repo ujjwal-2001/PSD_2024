@@ -24,35 +24,42 @@
 
 module CPU(
     input wire clock,     // Clock
-    input wire reset,     // Reset
+    input wire reset      // Reset
 );
 
-    wire Branch, Jump, RegDst;                          // Control signals
-    wire MemWrite, ALUSrc, RegWrite;                    // Control signals
-    wire sw, sh, sb, lw, lh, lhu, lb, lbu;              // Control signals
-    wire [1:0] ALUOp, MemtoReg;                         // Control signals
+    // Control signals
+    wire Branch, Jump, RegDst;                         
+    wire MemWrite, ALUSrc, RegWrite;                    
+    wire sw, sh, sb, lw, lh, lhu, lb, lbu;              
+    wire [1:0] ALUOp, MemtoReg;    
 
-    wire [3:0] ALUCtl, FuncCode;                        // ALU control signal
+    // ALU control signal
+    wire [3:0] ALUCtl, FuncCode;     
 
-    wire [31:0] PC, PCBranch, PCNext;                   // Program counter
+    // Program counter                   
+    wire [31:0] PC, PCBranch, PCNext;
 
+    // Other wires
     wire [31:0] Instruction;                            // Instruction
     wire [4:0]  WriteReg;                               // Register
     wire [31:0] ReadData1, ReadData2, WriteData;        // Data
     wire [31:0] Immediate, B, ALUResult, ReadData;      // Data
     wire zero;                                          // Zero flag
     
-    assign WriteReg  = (RegDst)? Instruction[19:15] : Instruction[11:7]; // Select WriteReg
+    // Assignments
+    assign WriteReg  = (RegDst)? Instruction[19:15] : Instruction[11:7];// Select WriteReg
     assign WriteData = (MemtoReg[1])? Immediate : (MemtoReg[0])? ReadData : ALUResult; // Select WriteData
-    assign B = (ALUSrc)? Immediate : ReadData1?                 // Select B
-    assign FuncCode  = {Instruction[30], Instruction[14:12]};   // Extract FuncCode
-    assign PCBranch  = PC + Immediate;                          // Calculate PCBranch
-    assign PCNext    = ((Branch & Zero) | Jump)? PCBranch : (PC+1);      // Calculate PCNext
+    assign B         = (ALUSrc)? Immediate : ReadData1;                 // Select B
+    assign FuncCode  = {Instruction[30], Instruction[14:12]};           // Extract FuncCode
+    assign PCBranch  = PC + Immediate;                                  // Calculate PCBranch
+    assign PCNext    = ((Branch & Zero) | Jump)? PCBranch : (PC+1);     // Calculate PCNext
 
-    always@(posedge clock)begin                             // Update PC
+    // Register for program counter
+    always@(posedge clock)begin
         PC <= (reset)? 32'd0 : PCNext;   
     end
 
+    // Module instances
     dist_mem_gen_1 InstructionMem(        // Instruction memory
         .a(PC),
         .d(32'd0),
@@ -79,19 +86,19 @@ module CPU(
         .lh(lh),
         .lhu(lhu),
         .lb(lb),
-        .lbu(lbu),
+        .lbu(lbu)
     );
 
     RegisterFile RegFile(               // Register file
-        .clk(clk);
-        .reset(reset);
-        .RegWrite(RegWrite);
-        .ReadReg1(Instruction[19:15]);
-        .ReadReg2(Instruction[24:20]);
-        .WriteReg(WriteReg);
-        .WriteData(WriteData);
-        .ReadData1(ReadData1);
-        .ReadData2(ReadData2);
+        .clk(clk),
+        .reset(reset),
+        .RegWrite(RegWrite),
+        .ReadReg1(Instruction[19:15]),
+        .ReadReg2(Instruction[24:20]),
+        .WriteReg(WriteReg),
+        .WriteData(WriteData),
+        .ReadData1(ReadData1),
+        .ReadData2(ReadData2)
     );
 
     ImmGen ImmGen(                      // Immediate generator
