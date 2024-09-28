@@ -29,24 +29,35 @@ module ALUControl (
     parameter [3:0] SUBTRACT = 4'b0110;
     parameter [3:0] AND = 4'b0000;
     parameter [3:0] OR  = 4'b0001;
-    parameter [3:0] NOR = 4'b1100;
-    parameter [3:0] SLT = 4'b0111;
+    parameter [3:0] SLL = 4'b1000;
+    parameter [3:0] GTE = 4'b0111;
+    parameter [3:0] LTE = 4'b1001;
 
     always@(*) begin
         case (ALUOp)
             2'b00: ALUCtl = ADD;                // ALUOp is 00
-            2'b01: ALUCtl = SUBTRACT;           // ALUOp is 01
+            2'b01: begin
+                case (FuncCode[2:0])                 // ALUOp is 01
+                    3'b000: ALUCtl = SUBTRACT;
+                    3'b001: ALUCtl = GTE;
+                    3'b100: ALUCtl = LTE;
+                endcase
+            end
             2'b10: begin
                 case (FuncCode)                 // ALUOp is 10
                     4'b0000: ALUCtl = ADD;
                     4'b1000: ALUCtl = SUBTRACT;
                     4'b0111: ALUCtl = AND;
                     4'b0110: ALUCtl = OR;
-                    4'b0001: ALUCtl = SLT;
                     default: ALUCtl = ADD;
                 endcase
             end
-            default: ALUCtl = ADD;              
+            2'b11: begin
+                case (FuncCode[2:0])                 // ALUOp is 11
+                    3'b000: ALUCtl = ADD;
+                    3'b001: ALUCtl = SLL;
+                endcase    
+            end              
         endcase
     end
 

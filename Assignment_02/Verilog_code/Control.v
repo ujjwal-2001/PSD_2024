@@ -31,9 +31,9 @@ module Control
 //|-------------|--------|-----------|-----------|-----------|----------|-----------|--------|--------|--------|-------|--------|
 //| R-format    |    0   |     0     |     0     |     1     |     0    |     0     |    0   |    1   |    0   |   0   |   0    |
 //| ld (I-Type1)|    1   |     0     |     1     |     1     |     1    |     0     |    0   |    0   |    0   |   0   |   0    |
-//| I-Type2     |    1   |     0     |     0     |     1     |     0    |     0     |    0   |    0   |    0   |   0   |   0    |
+//| I-Type2     |    1   |     0     |     0     |     1     |     0    |     0     |    0   |    1   |    1   |   0   |   0    |
 //| S-Type      |    1   |     X     |     X     |     0     |     0    |     1     |    0   |    0   |    0   |   0   |   1    |
-//| SB-Type     |    0   |     X     |     X     |     0     |     0    |     0     |    1   |    0   |    1   |   0   |   1    |
+//| SB-Type     |    0   |     X     |     X     |     0     |     0    |     0     |    1   |    0   |    1   |   0   |   X    |
 //| U-Type      |    X   |     1     |     0     |     1     |     0    |     0     |    0   |    X   |    X   |   0   |   0    | 
 //| UJ-Type     |    X   |     X     |     X     |     0     |     0    |     0     |    0   |    X   |    X   |   1   |   0    | 
 
@@ -49,12 +49,12 @@ module Control
     assign Jump     = (opcode == UJ_TYPE);
     assign MemtoReg[1] = (opcode == U_TYPE);
     assign MemtoReg[0] = (opcode == I_TYPE1);
-    assign ALUOp[1] = (opcode == R_TYPE);
-    assign ALUOp[0] = (opcode == SB_TYPE);
+    assign ALUOp[1] = (opcode == R_TYPE | opcode == I_TYPE2);
+    assign ALUOp[0] = (opcode == SB_TYPE | opcode == I_TYPE2);
     assign MemWrite = (opcode == S_TYPE);
     assign ALUSrc   = (opcode == I_TYPE1 | opcode == I_TYPE2 | opcode == S_TYPE);
     assign RegWrite = ~(opcode == S_TYPE | opcode == SB_TYPE | opcode == UJ_TYPE);
-    assign RegDst   = (opcode == S_TYPE | opcode == SB_TYPE);
+    assign RegDst   = (opcode == S_TYPE);
     assign sw       = (opcode == S_TYPE) & ( funct3 == 3'b010 );
     assign sh       = (opcode == S_TYPE) & ( funct3 == 3'b001 );
     assign sb       = (opcode == S_TYPE) & ( funct3 == 3'b000 );

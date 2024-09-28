@@ -20,12 +20,13 @@ module ALU (
     output wire Zero                 // Zero flag
     );
 
-    parameter [3:0] SUBTRACT = 4'b0110;
     parameter [3:0] ADD = 4'b0010;
+    parameter [3:0] SUBTRACT = 4'b0110;
     parameter [3:0] AND = 4'b0000;
     parameter [3:0] OR  = 4'b0001;
-    parameter [3:0] NOR = 4'b1100;
-    parameter [3:0] SLT = 4'b0111;
+    parameter [3:0] SLL = 4'b1000;
+    parameter [3:0] GTE = 4'b0111;
+    parameter [3:0] LTE = 4'b1001;
 
     assign Zero = (ALUResult==0);   // Zero is true if ALUResult is 0
 
@@ -34,9 +35,10 @@ module ALU (
             ADD: ALUResult = A + B;
             AND: ALUResult = A & B;
             OR: ALUResult  = A | B;
-            NOR: ALUResult = ~(A | B);
-            SLT: ALUResult = (A < B) ? 1 : 0;
             SUBTRACT: ALUResult = A - B;
+            SLL: ALUResult = A << B[5:0];
+            GTE: ALUResult = (A >= B) ? 32'd1 : 32'd0;
+            LTE: ALUResult = (A <= B) ? 32'd1 : 32'd0;
             default: ALUResult  = A + B;
         endcase
     end
