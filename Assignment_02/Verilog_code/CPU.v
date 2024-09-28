@@ -24,7 +24,8 @@
 
 module CPU(
     input wire clock,     // Clock
-    input wire reset      // Reset
+    input wire reset,     // Reset
+    output wire [31:0] RF [31:0] // Register file
 );
 
     // Control signals
@@ -98,7 +99,8 @@ module CPU(
         .WriteReg(WriteReg),
         .WriteData(WriteData),
         .ReadData1(ReadData1),
-        .ReadData2(ReadData2)
+        .ReadData2(ReadData2),
+        .RF(RF)
     );
 
     ImmGen ImmGen(                      // Immediate generator

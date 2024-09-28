@@ -1,5 +1,5 @@
     .data
-arr:    .word 5, 2, 8, 7, 1, 3, 9, 4, 6, 0   # Array initialized in memory
+arr:    .word 5, 2, 8, 7, 1, 3, 9, 4, 6, 10   # Array initialized in memory
 
     .text
     .globl _start

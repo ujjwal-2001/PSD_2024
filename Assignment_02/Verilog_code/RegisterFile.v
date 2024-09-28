@@ -23,9 +23,10 @@ module RegisterFile (
     input  wire reset,                   // Reset signal
     output wire [31:0] ReadData1,        // Data read from Read1
     output wire [31:0] ReadData2         // Data read from Read2
+    output reg  [31:0] RF [31:0]         // 32, 32-bit registers
     );
     
-    reg [31:0] RF [31:0]; // 32, 32-bit registers
+    // reg [31:0] RF [31:0]; // 32, 32-bit registers
     
     // Read data from registers
     assign ReadData1 = RF[Read1];   
