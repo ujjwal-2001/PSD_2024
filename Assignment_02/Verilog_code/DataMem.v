@@ -19,68 +19,79 @@ module DataMem(
     input  wire [31:0] WriteData,// Data to be written
     input  wire MemWrite,        // Write enable
     input  wire sw,sh,sb,        // Store word, Store halfword, Store byte - Control signals
-    input  wire lw,lh,lbu,lb,lbu // Load word, Load halfword, Load halfword unsigned, Load byte - Control signals
+    input  wire lw,lh,lbu,lb,lhu,// Load word, Load halfword, Load halfword unsigned, Load byte - Control signals
     output wire [31:0] ReadData  // Data to be read
 );
 
     wire [31:0] DataIn;
+    wire [7:0]  DataIn0, DataIn1, DataIn2, DataIn3;
     wire [31:0] DataOut;
+    wire [7:0]  DataOut0, DataOut1, DataOut2, DataOut3;
     wire we0,we1,we2,we3;
+    wire [9:0] LineAddress;
+    wire [1:0] Offset;
+
+    assign LineAddress = Address[11:2];
+    assign Offset = Address[1:0];
+    assign DataIn0 = DataIn[7:0];
+    assign DataIn1 = DataIn[15:8];
+    assign DataIn2 = DataIn[23:16];
+    assign DataIn3 = DataIn[31:24];
 
     WriteAlign WriteAlign(          // Align the data to be written
         .WriteData(WriteData),
-        .Address(Address[1:0]),
+        .Address(Offset),
         .sb(sb),
         .sh(sh),
         .sw(sw),
-        .we0(MemWrite & we0),
-        .we1(MemWrite & we1),
-        .we2(MemWrite & we2),
-        .we3(MemWrite & we3),
+        .we0(we0),
+        .we1(we1),
+        .we2(we2),
+        .we3(we3),
         .DataIn(DataIn)
     );
 
     ReadAlign ReadAlign(            // Align the data to be read
         .DataOut(DataOut),
-        .Address(Address[1:0]),
+        .Address(Offset),
         .lb(lb),
         .lbu(lbu),
         .lh(lh),
-        .lhu(lbu),
+        .lhu(lhu),
         .lw(lw),
         .ReadData(ReadData)
     );
 
     // Memory banks
     dist_mem_gen_1 Bank0(
-        .a(Address[11:2]),
-        .d(DataIn[7:0]),
+        .a(LineAddress),
+        .d(DataIn0),
         .clk(clock),
-        .we(we0),
+        .we(MemWrite & we0),
         .spo(DataOut[7:0])
     );
 
     dist_mem_gen_1 Bank1(
-        .a(Address[11:2]),
-        .d(DataIn[15:8]),
+        .a(LineAddress),
+        .d(DataIn1),
         .clk(clock),
-        .we(we1),
-        .spo(DataOut[15:6])
+        .we(MemWrite & we1),
+        .spo(DataOut[15:8])
     );
 
     dist_mem_gen_1 Bank2(
-        .a(Address[11:2]),
-        .d(DataIn[23:16]),
+        .a(LineAddress),
+        .d(DataIn2),
         .clk(clock),
-        .we(we2),
+        .we(MemWrite & we2),
         .spo(DataOut[23:16])
     );
 
     dist_mem_gen_1 Bank3(
-        .a(Address[11:2]),
-        .d(DataIn[31:24]),
+        .a(LineAddress),
+        .d(DataIn3),
         .clk(clock),
-        .we(we3),
+        .we(MemWrite & we3),
         .spo(DataOut[31:24])
     );
 

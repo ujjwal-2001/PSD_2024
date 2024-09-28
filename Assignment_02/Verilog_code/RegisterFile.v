@@ -22,21 +22,22 @@ module RegisterFile (
     input  wire clock,                   // Clock signal
     input  wire reset,                   // Reset signal
     output wire [31:0] ReadData1,        // Data read from Read1
-    output wire [31:0] ReadData2         // Data read from Read2
-    output reg  [31:0] RF [31:0]         // 32, 32-bit registers
+    output wire [31:0] ReadData2,        // Data read from Read2
+    output wire [31:0] RF1               // Register 1 data
     );
     
-    // reg [31:0] RF [31:0]; // 32, 32-bit registers
-    
+    reg [31:0] RF [31:0]; // 32, 32-bit registers
+    integer i;
     // Read data from registers
     assign ReadData1 = RF[Read1];   
     assign ReadData2 = RF[Read2];
+    assign RF1 = RF[1]; // Read data from register 1
 
     // Write data to a register if RegWrite is high
     always@(posedge clock)begin
 
         if(reset)begin
-            for(integer i=0; i<32; i=i+1)begin
+            for(i=0; i<32; i=i+1)begin
                 RF[i] <= 32'd0; 
             end
         end

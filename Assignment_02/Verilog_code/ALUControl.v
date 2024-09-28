@@ -39,8 +39,9 @@ module ALUControl (
             2'b01: begin
                 case (FuncCode[2:0])                 // ALUOp is 01
                     3'b000: ALUCtl = SUBTRACT;
-                    3'b001: ALUCtl = GTE;
+                    3'b101: ALUCtl = GTE;
                     3'b100: ALUCtl = LTE;
+                    default: ALUCtl = SUBTRACT;
                 endcase
             end
             2'b10: begin
@@ -56,6 +57,7 @@ module ALUControl (
                 case (FuncCode[2:0])                 // ALUOp is 11
                     3'b000: ALUCtl = ADD;
                     3'b001: ALUCtl = SLL;
+                    default: ALUCtl = ADD;
                 endcase    
             end              
         endcase

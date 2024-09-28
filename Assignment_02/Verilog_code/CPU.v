@@ -25,7 +25,7 @@
 module CPU(
     input wire clock,     // Clock
     input wire reset,     // Reset
-    output wire [31:0] RF [31:0] // Register file
+    output wire [31:0] RF1 // Register file
 );
 
     // Control signals
@@ -38,19 +38,22 @@ module CPU(
     wire [3:0] ALUCtl, FuncCode;     
 
     // Program counter                   
-    wire [31:0] PC, PCBranch, PCNext;
+    reg  [31:0] PC;
+    wire [31:0] PCBranch, PCNext;
 
     // Other wires
     wire [31:0] Instruction;                            // Instruction
-    wire [4:0]  WriteReg;                               // Register
+    wire [4:0]  WriteReg, Read1, Read2;                 // Register
     wire [31:0] ReadData1, ReadData2, WriteData;        // Data
     wire [31:0] Immediate, B, ALUResult, ReadData;      // Data
-    wire zero;                                          // Zero flag
+    wire Zero;                                          // Zero flag
     
     // Assignments
+    assign Read1     = Instruction[19:15];                              // Select Read1
+    assign Read2     = Instruction[24:20];                              // Select Read2
     assign WriteReg  = (RegDst)? Instruction[19:15] : Instruction[11:7];// Select WriteReg
     assign WriteData = (MemtoReg[1])? Immediate : (MemtoReg[0])? ReadData : ALUResult; // Select WriteData
-    assign B         = (ALUSrc)? Immediate : ReadData1;                 // Select B
+    assign B         = (ALUSrc)? Immediate : ReadData2;                 // Select B
     assign FuncCode  = {Instruction[30], Instruction[14:12]};           // Extract FuncCode
     assign PCBranch  = PC + Immediate;                                  // Calculate PCBranch
     assign PCNext    = ((Branch & Zero) | Jump)? PCBranch : (PC+1);     // Calculate PCNext
@@ -61,10 +64,10 @@ module CPU(
     end
 
     // Module instances
-    dist_mem_gen_1 InstructionMem(        // Instruction memory
-        .a(PC),
+    dist_mem_gen_0 InstructionMem(        // Instruction memory
+        .a(PC[9:0]),
         .d(32'd0),
-        .clk(clk),
+        .clk(clock),
         .we(1'b0),
         .spo(Instruction)
     );
@@ -91,16 +94,16 @@ module CPU(
     );
 
     RegisterFile RegFile(               // Register file
-        .clk(clk),
+        .clock(clock),
         .reset(reset),
         .RegWrite(RegWrite),
-        .ReadReg1(Instruction[19:15]),
-        .ReadReg2(Instruction[24:20]),
+        .Read1(Read1),
+        .Read2(Read2),
         .WriteReg(WriteReg),
         .WriteData(WriteData),
         .ReadData1(ReadData1),
         .ReadData2(ReadData2),
-        .RF(RF)
+        .RF1(RF1)
     );
 
     ImmGen ImmGen(                      // Immediate generator
@@ -116,7 +119,7 @@ module CPU(
 
     ALU ALU(                            // ALU
         .ALUCtl(ALUCtl),
-        .A(ReadData2),
+        .A(ReadData1),
         .B(B),
         .ALUResult(ALUResult),
         .Zero(Zero)
@@ -125,13 +128,14 @@ module CPU(
     DataMem DataMem(                    // Data memory
         .clock(clock),
         .Address(ALUResult),
-        .WriteData(ReadData1),
+        .WriteData(ReadData2),
         .MemWrite(MemWrite),
         .sw(sw),
         .sh(sh),
         .sb(sb),
         .lw(lw),
         .lh(lh),
+        .lhu(lhu),
         .lbu(lbu),
         .lb(lb),
         .ReadData(ReadData)

@@ -14,13 +14,13 @@
 module TOP(
     input wire clock,     // Clock
     input wire reset,     // Reset
-    output wire [31:0] RF [31:0] // Register file
+    output wire [31:0] RF1// Register file
 );
 
     CPU CPU_inst(
         .clock(clock),
         .reset(reset),
-        .RF(RF)
+        .RF1(RF1)
     );
 
 endmodule

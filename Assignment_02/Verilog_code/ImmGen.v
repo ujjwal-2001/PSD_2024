@@ -37,8 +37,8 @@ module ImmGen(
 
     // Immediate Generation
     assign Immediate[31]    = Instruction[31];
-    assign Immediate[30:19] = (opcode == U_TYPE)? Instruction[30:19] : Instruction[31];
-    assign Immediate[18:12] = (opcode == U_TYPE || opcode == UJ_TYPE)? Instruction[18:12] : Instruction[31];
+    assign Immediate[30:19] = (opcode == U_TYPE)? Instruction[30:19] : {12{Instruction[31]}};
+    assign Immediate[18:12] = (opcode == U_TYPE || opcode == UJ_TYPE)? Instruction[18:12] : {7{Instruction[31]}};
     assign Immediate[11]    = (opcode == UJ_TYPE)? Instruction[19] : (opcode == U_TYPE)? 1'b0 : Instruction[31];
     assign Immediate[10:5]  = (opcode == U_TYPE)? 6'b0 : Instruction[30:25];
     assign Immediate[4:1]   = (opcode == U_TYPE)? 4'b0 : (opcode == S_TYPE || opcode == SB_TYPE)? Instruction[11:8] : Instruction[24:21];

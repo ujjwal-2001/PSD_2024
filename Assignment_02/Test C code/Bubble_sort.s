@@ -45,7 +45,8 @@ inner_loop:
     blt x10, x13, no_swap  # if arr[j] <= arr[j+1], skip swapping
 
     # Swap arr[j] and arr[j+1]
-    sw x10, 0(x12)       # Store arr[j+1] in arr[j]
+    sw x10, 0(x12)       # Store arr[j] in arr[j+1]
+    sw x13, -4(x12)      # Store arr[j+1] in arr[j]
 
 no_swap:
     # Increment j (x7 = j + 1)

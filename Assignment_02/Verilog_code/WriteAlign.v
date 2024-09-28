@@ -21,7 +21,7 @@ module WriteAlign(
     output wire [31:0] DataIn       // Data aligned
 );
 
-    reg [8:0] D7_0, D15_8, D23_16, D31_24;
+    reg [7:0] D7_0, D15_8, D23_16, D31_24;
     reg [1:0] T;
     reg U, V;
 
