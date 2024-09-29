@@ -26,7 +26,6 @@ module DataMem(
     wire [31:0] DataIn;
     wire [7:0]  DataIn0, DataIn1, DataIn2, DataIn3;
     wire [31:0] DataOut;
-    wire [7:0]  DataOut0, DataOut1, DataOut2, DataOut3;
     wire we0,we1,we2,we3;
     wire [9:0] LineAddress;
     wire [1:0] Offset;

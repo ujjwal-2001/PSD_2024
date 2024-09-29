@@ -23,9 +23,18 @@
 //----------------------------------------------------------------------------------------------------//
 
 module CPU(
-    input wire clock,     // Clock
-    input wire reset,     // Reset
-    output wire [31:0] RF1 // Register file
+    input wire clock,       // Clock
+    input wire reset,       // Reset
+    output wire [31:0] RF1, // Register 1
+    output wire [31:0] RF2, // Register 2
+    output wire [31:0] RF3, // Register 3
+    output wire [31:0] RF4, // Register 4
+    output wire [31:0] RF5, // Register 5
+    output wire [31:0] RF6, // Register 6
+    output wire [31:0] RF7, // Register 7
+    output wire [31:0] RF8, // Register 8
+    output wire [31:0] RF9, // Register 9
+    output wire [31:0] RF10 // Register 10
 );
 
     // Control signals
@@ -103,7 +112,16 @@ module CPU(
         .WriteData(WriteData),
         .ReadData1(ReadData1),
         .ReadData2(ReadData2),
-        .RF1(RF1)
+        .RF1(RF1),
+        .RF2(RF2),
+        .RF3(RF3),
+        .RF4(RF4),
+        .RF5(RF5),
+        .RF6(RF6),
+        .RF7(RF7),
+        .RF8(RF8),
+        .RF9(RF9),
+        .RF10(RF10)
     );
 
     ImmGen ImmGen(                      // Immediate generator

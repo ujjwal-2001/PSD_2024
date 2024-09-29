@@ -38,7 +38,7 @@ module ALU (
             SUBTRACT: ALUResult = A - B;
             SLL: ALUResult = A << B[5:0];
             GTE: ALUResult = (A >= B) ? 32'd0 : 32'd1;      // Reverse answer because we what zero to be 
-            LTE: ALUResult = (A <= B) ? 32'd0 : 32'd1;      // true if B is less than A
+            LTE: ALUResult = (A < B) ? 32'd0 : 32'd1;       // true if B is less than A
             default: ALUResult  = A + B;
         endcase
     end
