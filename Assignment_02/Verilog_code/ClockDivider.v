@@ -17,7 +17,7 @@ module ClockDivider(
     output wire clock_div       // Divided clock
 );
 
-    reg [1:0] count;
+    reg [1:0] count;   // Counter
 
     always@(posedge clock or posedge reset)begin
         if(reset)begin
@@ -28,6 +28,6 @@ module ClockDivider(
         end
     end
 
-    assign clock_div = count[1];
+    assign clock_div = count[1];    // Divided clock
 
 endmodule

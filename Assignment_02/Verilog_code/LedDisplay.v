@@ -1,11 +1,11 @@
-//<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=//
+//===========================================================================//
 // File Name    :   LedDisplay.v
 // Module Name  :   LedDisplay
 // Author       :   Ujjwal Chaudhary, M. Tech. ESE'25, IISc Bangalore.
 // Course       :   E3 245 Processor System Design
 // Assignment   :   2
 // Topic        :   32-bit RISC-V Single-clcycle Processor
-// <=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=//
+//===========================================================================//
 
 //--------------------------------------------DESCRIPTION---------------------------------------------//
 // This is a LED display module that displays the values of the registers on the LEDs of the FPGA board.

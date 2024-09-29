@@ -13,7 +13,7 @@
 #include <stdio.h>
 
 void main(){
-    int arr[10] = {5, 2, 8, 7, 1, 3, 9, 4, 6, 0};
+    int arr[10] = {53, 4, 122, 8, 6, 15, 3, 7, 127, 10};
     int i, j, temp;
 
     // Bubble Sort Algorithm

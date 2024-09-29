@@ -14,10 +14,10 @@
 //----------------------------------------------------------------------------------------------------//
 
 module ALU (
-    input  wire [3:0] ALUCtl,        // Control signal
-    input  wire [31:0] A,B,          // Inputs
-    output reg [31:0] ALUResult,     // Output
-    output wire Zero                 // Zero flag
+    input  wire [3:0] ALUCtl,         // Control signal
+    input  wire [31:0] A,B,           // Inputs
+    output reg  [31:0] ALUResult,     // Output
+    output wire Zero                  // Zero flag
     );
 
     parameter [3:0] ADD = 4'b0010;
@@ -34,7 +34,7 @@ module ALU (
         case (ALUCtl)               // Perform operation based on ALUctl
             ADD: ALUResult = A + B;
             AND: ALUResult = A & B;
-            OR: ALUResult  = A | B;
+            OR : ALUResult = A | B;
             SUBTRACT: ALUResult = A - B;
             SLL: ALUResult = A << B[5:0];
             GTE: ALUResult = (A >= B) ? 32'd0 : 32'd1;      // Reverse answer because we what zero to be 

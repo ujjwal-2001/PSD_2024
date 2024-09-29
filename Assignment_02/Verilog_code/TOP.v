@@ -8,7 +8,11 @@
 // ===================================================//
 
 //--------------------------------------------DESCRIPTION---------------------------------------------//
-
+// This module is the top module that instantiates the ClockDivider, CPU, and LedDisplay modules.
+// The ClockDivider module generates a clock signal that is 1/4th the frequency of the input clock signal.
+// The CPU module is the processor that executes the instructions loaded in the instruction memory.
+// The LedDisplay module displays the contents of the register file on the LEDs based on the select signal.
+// The select signal is used to select the register whose contents are displayed on the LEDs.
 //----------------------------------------------------------------------------------------------------//
 
 module TOP(

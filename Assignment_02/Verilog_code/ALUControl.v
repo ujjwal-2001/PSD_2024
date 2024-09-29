@@ -13,16 +13,16 @@
 // to control the operation of the MIPSALU module. The ALUCtl signal is determined
 // as follows:
 // If ALUOp is 00, ALUCtl is ADD
-// If ALUOp is 01, ALUCtl is SUBTRACT
+// If ALUOp is 01, ALUCtl is determined by FuncCode
 // If ALUOp is 10, ALUCtl is determined by FuncCode
-// If ALUOp is 11, ALUCtl is ADD
+// If ALUOp is 11, ALUCtl is determined by FuncCode
 //------------------------------------------------------------------------------//
 
 
 module ALUControl (
-    input  wire [1:0] ALUOp,     // ALU operation code
-    input  wire [3:0] FuncCode,  // funct7[5], funct3[2:0]
-    output reg [3:0] ALUCtl      // ALU control signal
+    input  wire [1:0] ALUOp,      // ALU operation code
+    input  wire [3:0] FuncCode,   // funct7[5], funct3[2:0]
+    output reg  [3:0] ALUCtl      // ALU control signal
     );
 
     parameter [3:0] ADD = 4'b0010;
