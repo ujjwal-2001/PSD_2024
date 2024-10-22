@@ -2,7 +2,6 @@
 **Date**: Sept-2024
 
 ## Table of Contents
-## Table of Contents
 1. [Author](#author)
 2. [Introduction](#introduction)
 3. [Processor Design](#processor-design)
