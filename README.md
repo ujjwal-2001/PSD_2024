@@ -1,5 +1,5 @@
 # Assignments of E3 245 Processor System Design
-This repo contains the assignments of the course E3 245 Processor System Design (PSD) for the August term of 2024.
+This repo contains the course E3 245 Processor System Design (PSD) assignments for the August term of 2024.
 
 ## Table of Content
 1. [Assignment 01: 16-bit Multi-cycle Processor Design](/Assignment_01/)
