@@ -95,10 +95,10 @@ In this design, all operations—fetching, decoding, execution, memory access, a
 
 #### Clock Division and Display
 
-A clock divider was implemented to reduce the clock frequency from 100 MHz to a level compatible with the processor's design. A simple output display using the FPGA’s LEDs showcases results. Below are schematics of the datapath.
+A clock divider was implemented to reduce the clock frequency from 100 MHz to a level compatible with the processor's design. A simple output display using the FPGA’s LEDs showcases results. Below are schematics of the datapath. The RTL schematics of the processor can be found [here](../Assignment_02/Assets/DataMem.pdf).
 
 #### Level 0 Data-path Schematic
-<img src="./Assets/Level_0.png" alt="Level 0 Data-path" width="400"/>
+<img src="./Assets/Level_0.png" alt="Level 0 Data-path" width="1000"/>
 
 #### Level 1 Data-path Schematic
 <img src="./Assets/Level1.png" alt="Level 1 Data-path" width="1000"/>
@@ -106,8 +106,6 @@ A clock divider was implemented to reduce the clock frequency from 100 MHz to a 
 ## Control Unit
 
 The control unit generates control signals based on the opcode and funct3 fields of the instruction in the processor.
-
-<img src="DataMem.pdf" alt="RTL Schematics of Data Memory" style="width: 100%;">
 
 ### Control Signals
 
@@ -221,7 +219,7 @@ beq x0, x0, -1
 ### Binary Code
 The assembly code was then converted into binary instructions and loaded into the instruction memory. The Tables below shows the binary representation of the program.
 
-#### Table: Binary instructions for data initialization and setup
+#### Binary instructions for data initialization and setup
 
 | Address   | Instruction        | Binary Code                           |
 |-----------|--------------------|---------------------------------------|
@@ -246,7 +244,7 @@ The assembly code was then converted into binary instructions and loaded into th
 | 0x00000012 | addi x5, x0, 10    | 000000001010 00000 000 00101 0010011  |
 | 0x00000013 | sw x5, 36(x0)      | 0000000 00101 00000 010 00100 0100011 |
 
-#### Table: Binary instructions for the Bubble Sort inner loop
+#### Binary instructions for the Bubble Sort inner loop
 
 | Address   | Instruction        | Binary Code                           |
 |-----------|--------------------|---------------------------------------|
@@ -265,7 +263,7 @@ The assembly code was then converted into binary instructions and loaded into th
 | 0x00000020 | add x12, x6, x11   | 0000000 01011 00110 000 01100 0110011 |
 | 0x00000021 | lw x13, 0(x12)     | 000000000000 01100 010 01101 0000011  |
 
-#### Table: Binary instructions for the Bubble Sort outer loop and branching
+#### Binary instructions for the Bubble Sort outer loop and branching
 
 | Address   | Instruction        | Binary Code                           |
 |-----------|--------------------|---------------------------------------|
@@ -278,7 +276,7 @@ The assembly code was then converted into binary instructions and loaded into th
 | 0x00000028 | addi x8, x0, 10    | 000000001010 00000 000 01000 0010011  |
 | 0x00000029 | blt x5, x8, -19    | 1111111 01000 00101 100 01101 1100111 |
 
-#### Table: Binary instructions for loading the sorted array into registers and infinite loop
+#### Binary instructions for loading the sorted array into registers and infinite loop
 
 | Address   | Instruction        | Binary Code                           |
 |-----------|--------------------|---------------------------------------|
@@ -307,13 +305,13 @@ The assembly code was then converted into binary instructions and loaded into th
 The timing report from the FPGA synthesis confirms that all setup and hold times are met, with no timing violations at a 21 ns clock period. The timing summary is given in the figure below. The power and resource utilization reports are presented in the following figures:-
 
 #### Timings Summary Report
-<img src="./Assets/Time.png" alt="Level 0 Data-path" width="400"/>
+<img src="./Assets/Time.png" alt="Level 0 Data-path" width="800"/>
 
 #### Resource Utilization 
-<img src="./Assets/utilization.png" alt="Level 1 Data-path" width="1000"/>
+<img src="./Assets/utilization.png" alt="Level 1 Data-path" width="800"/>
 
 #### Power Summary
-<img src="./Assets/power.png" alt="Level 0 Data-path" width="400"/>
+<img src="./Assets/power.png" alt="Level 0 Data-path" width="800"/>
 
 
 ## Conclusion
