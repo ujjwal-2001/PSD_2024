@@ -3,8 +3,8 @@
 // Module Name  :   RegisterFile
 // Author       :   Ujjwal Chaudhary, M. Tech. ESE'25, IISc Bangalore.
 // Course       :   E3 245 Processor System Design
-// Assignment   :   2
-// Topic        :   32-bit RISC-V Single-clcycle Processor
+// Assignment   :   3
+// Topic        :   32-bit RISC-V 5-stage Pipelined Processor
 // ===================================================//
 
 //-----------------------------------DESCRIPTION-----------------------------------------------//
