@@ -46,15 +46,15 @@ module Control
     output wire lw, lh, lhu, lb, lbu
 );
 
-//| Instruction | ALUSrc | Memto-Reg1| Memto-Reg0| Reg-Write | Mem-Read | Mem-Write | Branch | ALUOp1 | ALUOp0 | Jump  | RegDst |
-//|-------------|--------|-----------|-----------|-----------|----------|-----------|--------|--------|--------|-------|--------|
-//| R-format    |    0   |     0     |     0     |     1     |     0    |     0     |    0   |    1   |    0   |   0   |   0    |
-//| ld (I-Type1)|    1   |     0     |     1     |     1     |     1    |     0     |    0   |    0   |    0   |   0   |   0    |
-//| I-Type2     |    1   |     0     |     0     |     1     |     0    |     0     |    0   |    1   |    1   |   0   |   0    |
-//| S-Type      |    1   |     X     |     X     |     0     |     0    |     1     |    0   |    0   |    0   |   0   |   1    |
-//| SB-Type     |    0   |     X     |     X     |     0     |     0    |     0     |    1   |    0   |    1   |   0   |   X    |
-//| U-Type      |    X   |     1     |     0     |     1     |     0    |     0     |    0   |    X   |    X   |   0   |   0    | 
-//| UJ-Type     |    X   |     X     |     X     |     0     |     0    |     0     |    0   |    X   |    X   |   1   |   0    | 
+//| Instruction | ALUSrc | Memto-Reg1| Memto-Reg0| Reg-Write | Mem-Read | Mem-Write | Branch | ALUOp1 | ALUOp0 | Jump  |
+//|-------------|--------|-----------|-----------|-----------|----------|-----------|--------|--------|--------|-------|
+//| R-format    |    0   |     0     |     0     |     1     |     0    |     0     |    0   |    1   |    0   |   0   |
+//| ld (I-Type1)|    1   |     0     |     1     |     1     |     1    |     0     |    0   |    0   |    0   |   0   |
+//| I-Type2     |    1   |     0     |     0     |     1     |     0    |     0     |    0   |    1   |    1   |   0   |
+//| S-Type      |    1   |     X     |     X     |     0     |     0    |     1     |    0   |    0   |    0   |   0   |
+//| SB-Type     |    0   |     X     |     X     |     0     |     0    |     0     |    1   |    0   |    1   |   0   |
+//| U-Type      |    X   |     1     |     0     |     1     |     0    |     0     |    0   |    X   |    X   |   0   | 
+//| UJ-Type     |    X   |     X     |     X     |     0     |     0    |     0     |    0   |    X   |    X   |   1   | 
 
     parameter R_TYPE  = 7'b0110011;
     parameter I_TYPE1 = 7'b0000011;
@@ -73,7 +73,6 @@ module Control
     assign MemWrite = (opcode == S_TYPE);
     assign ALUSrc   = (opcode == I_TYPE1 | opcode == I_TYPE2 | opcode == S_TYPE);
     assign RegWrite = ~(opcode == S_TYPE | opcode == SB_TYPE | opcode == UJ_TYPE);
-    assign RegDst   = (opcode == S_TYPE);
     assign sw       = (opcode == S_TYPE) & ( funct3 == 3'b010 );
     assign sh       = (opcode == S_TYPE) & ( funct3 == 3'b001 );
     assign sb       = (opcode == S_TYPE) & ( funct3 == 3'b000 );

@@ -38,7 +38,7 @@ module CPU(
 );
 
     // Control signals
-    wire Branch, Jump, RegDst;                         
+    wire Branch, Jump;                         
     wire MemWrite, ALUSrc, RegWrite;                    
     wire sw, sh, sb, lw, lh, lhu, lb, lbu;              
     wire [1:0] ALUOp, MemtoReg;    
@@ -60,7 +60,7 @@ module CPU(
     // Assignments
     assign Read1     = Instruction[19:15];                              // Select Read1
     assign Read2     = Instruction[24:20];                              // Select Read2
-    assign WriteReg  = (RegDst)? Instruction[19:15] : Instruction[11:7];// Select WriteReg
+    assign WriteReg  = Instruction[11:7];                               // Select WriteReg
     assign WriteData = (MemtoReg[1])? Immediate : (MemtoReg[0])? ReadData : ALUResult; // Select WriteData
     assign B         = (ALUSrc)? Immediate : ReadData2;                 // Select B
     assign FuncCode  = {Instruction[30], Instruction[14:12]};           // Extract FuncCode
@@ -91,7 +91,6 @@ module CPU(
         .MemWrite(MemWrite),
         .ALUSrc(ALUSrc),
         .RegWrite(RegWrite),
-        .RegDst(RegDst),
         .sw(sw),
         .sh(sh),
         .sb(sb),
