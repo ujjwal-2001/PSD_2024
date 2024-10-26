@@ -27,19 +27,17 @@ module ID(
     output wire [31:0] ReadData1, ReadData2,
     output reg [4:0] WriteReg_ID,
     output reg [31:0] RF1, RF2, RF3, RF4, RF5, RF6, RF7, RF8, RF9, RF10,
-    output reg [31:0] Immediate
+    output reg [31:0] Immediate,
+    output reg [3:0] FuncCode
 );
     wire Branch, Jump, MemWrite; 
     wire [1:0] ALUOp, MemtoReg;
     wire RegWrite, ALUSrc;
     wire sw, sh, sb;
     wire lw, lh, lhu, lb, lbu;
-    wire [4:0] WriteReg;
     wire [31:0] Immediate_d;
 
-    assign WriteReg = Instruction[11:7];
-
-    always @(posedge clock or posedge reset) begin
+    always @(posedge clock) begin
         if (reset) begin
             PC_ID <= 32'd0;
             {Branch_ID, Jump_ID, MemWrite_ID} <= 3'b000;
@@ -48,6 +46,7 @@ module ID(
             {lw_ID, lh_ID, lhu_ID, lb_ID, lbu_ID} <= 5'b00000;
             WriteReg_ID <= 5'b00000;
             Immediate <= 32'd0;
+            FuncCode <= 4'd0;
         end
         else begin
             PC_ID <= PC_IF;
@@ -60,8 +59,9 @@ module ID(
             ALUSrc_ID <= ALUSrc;
             {sw_ID, sh_ID, sb_ID} <= {sw, sh, sb};
             {lw_ID, lh_ID, lhu_ID, lb_ID, lbu_ID} <= {lw, lh, lhu, lb, lbu};
-            WriteReg_ID <= WriteReg;
+            WriteReg_ID <= Instruction[11:7];
             Immediate <= Immediate_d;
+            FuncCode  <= {Instruction[30], Instruction[14:12]};
         end
     end
 

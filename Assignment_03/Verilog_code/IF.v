@@ -20,7 +20,7 @@ module IF(
 
     reg [31:0] PC_reg;
 
-    always @(posedge clock or posedge reset) begin
+    always @(posedge clock) begin
         if (reset) begin
             PC_reg <= 32'd0;
             PC <= 32'd0;
