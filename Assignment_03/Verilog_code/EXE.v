@@ -12,6 +12,7 @@
 //----------------------------------------------------------------------------------------------------//
 
 module EXE(
+    input wire clock, reset,
     input wire [31:0] PC_ID,
     input wire Branch_ID, Jump_ID, MemWrite_ID, 
     input wire [1:0] ALUOp_ID, MemtoReg_ID,
