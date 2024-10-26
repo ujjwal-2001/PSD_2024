@@ -10,3 +10,57 @@
 //--------------------------------------------DESCRIPTION---------------------------------------------//
 // 
 //----------------------------------------------------------------------------------------------------//
+
+module MEM(
+    input wire clock,       // Clock
+    input wire reset,       // Reset
+    input wire Branch_EXE, Jump_EXE, MemWrite_EXE,
+    input wire [1:0] MemtoReg_EXE,
+    input wire RegWrite_EXE,
+    input wire sw_EXE, sh_EXE, sb_EXE,
+    input wire lw_EXE, lh_EXE, lhu_EXE, lb_EXE, lbu_EXE,
+    input wire [4:0] WriteReg_EXE,
+    input wire [31:0] ALUResult, WriteData, Immediate_EXE,
+    output reg [31:0] ReadData, ALUResult_MEM, Immediate_MEM,
+    output reg [1:0] MemtoReg_MEM,
+    output reg RegWrite_MEM,
+    output wire PCSrc,
+    output reg [4:0] WriteReg_MEM
+);
+
+    assign PCSrc = (Branch_EXE & Zero) | Jump_EXE;
+
+    always@(posedge clock)begin
+        if(reset)begin
+            ALUResult_MEM <= 32'd0;
+            Immediate_MEM <= 32'd0;
+            MemtoReg_MEM <= 2'b00;
+            RegWrite_MEM <= 1'b0;
+            WriteReg_MEM <= 5'd0;
+        end
+        else begin
+            ALUResult_MEM <= ALUResult;
+            Immediate_MEM <= Immediate_EXE;
+            MemtoReg_MEM <= MemtoReg_EXE;
+            RegWrite_MEM <= RegWrite_EXE;
+            WriteReg_MEM <= WriteReg_EXE;
+        end
+    end
+
+    DataMem DataMem(                    // Data memory
+        .clock(clock),
+        .Address(ALUResult),
+        .WriteData(WriteData),
+        .MemWrite(MemWrite_EXE),
+        .sw(sw_EXE),
+        .sh(sh_EXE),
+        .sb(sb_EXE),
+        .lw(lw_EXE),
+        .lh(lh_EXE),
+        .lhu(lhu_EXE),
+        .lbu(lbu_EXE),
+        .lb(lb_EXE),
+        .ReadData(ReadData)
+    );
+
+endmodule

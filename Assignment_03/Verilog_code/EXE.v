@@ -29,7 +29,7 @@ module EXE(
     output reg RegWrite_EXE,
     output reg sw_EXE, sh_EXE, sb_EXE,
     output reg lw_EXE, lh_EXE, lhu_EXE, lb_EXE, lbu_EXE,
-    output reg [31:0] PCBranch,
+    output reg [31:0] PCBranch, Immediate_EXE,
     output reg [31:0] WriteData,
     output reg [4:0] WriteReg_EXE
 );
@@ -50,6 +50,7 @@ module EXE(
             PCBranch <= 32'd0;
             WriteData <= 32'd0;
             WriteReg_EXE <= 5'd0;
+            Immediate_EXE <= 32'd0;
         end
         else begin
             ALUResult <= ALUResult_d;
@@ -64,6 +65,7 @@ module EXE(
             PCBranch <= PC_ID + Immediate;
             WriteData <= ReadData2;
             WriteReg_EXE <= WriteReg_ID;
+            Immediate_EXE <= Immediate;
         end
     end
 
