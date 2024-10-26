@@ -19,15 +19,14 @@
 // 5. MemWrite  : Memory write control signal
 // 6. ALUSrc    : ALU source control signal
 // 7. RegWrite  : Register write control signal
-// 8. RegDst    : Register destination control signal
-// 9. sw        : Store word control signal
-// 10. sh       : Store halfword control signal
-// 11. sb       : Store byte control signal
-// 12. lw       : Load word control signal
-// 13. lh       : Load halfword control signal
-// 14. lhu      : Load halfword unsigned control signal
-// 15. lb       : Load byte control signal
-// 16. lbu      : Load byte unsigned control signal
+// 8. sw        : Store word control signal
+// 9. sh       : Store halfword control signal
+// 10. sb       : Store byte control signal
+// 11. lw       : Load word control signal
+// 12. lh       : Load halfword control signal
+// 13. lhu      : Load halfword unsigned control signal
+// 14. lb       : Load byte control signal
+// 15. lbu      : Load byte unsigned control signal
 //------------------------------------------------------------------------------//
 
 module Control
@@ -41,7 +40,6 @@ module Control
     output wire MemWrite,
     output wire ALUSrc,
     output wire RegWrite,
-    output wire RegDst,
     output wire sw, sh, sb, 
     output wire lw, lh, lhu, lb, lbu
 );

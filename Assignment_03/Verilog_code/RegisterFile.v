@@ -21,8 +21,8 @@ module RegisterFile (
     input  wire RegWrite,                // Write enable
     input  wire clock,                   // Clock signal
     input  wire reset,                   // Reset signal
-    output wire [31:0] ReadData1,        // Data read from Read1
-    output wire [31:0] ReadData2,        // Data read from Read2
+    output reg [31:0] ReadData1,        // Data read from Read1
+    output reg [31:0] ReadData2,        // Data read from Read2
     output wire [31:0] RF1,              // Register 1 data
     output wire [31:0] RF2,              // Register 2 data
     output wire [31:0] RF3,              // Register 3 data
@@ -37,9 +37,6 @@ module RegisterFile (
     
     reg [31:0] RF [31:0]; // 32, 32-bit registers
     integer i;
-    // Read data from registers
-    assign ReadData1 = RF[Read1];   
-    assign ReadData2 = RF[Read2];
 
     // Assign data to the output registers
     assign RF1 = RF[1]; 
@@ -67,6 +64,10 @@ module RegisterFile (
                 RF[WriteReg] <= WriteData;  // Write data to the specified register
             end
         end
+
+        // Read data from the specified registers
+        ReadData1 <= RF[Read1];   
+        ReadData2 <= RF[Read2];
 
     end
 
