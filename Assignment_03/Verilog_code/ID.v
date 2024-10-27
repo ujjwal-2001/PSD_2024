@@ -14,7 +14,7 @@
 //----------------------------------------------------------------------------------------------------//
 
 module ID(
-    input  wire clock, reset,
+    input  wire clock, reset, Discard_ID,
     input  wire [31:0] Instruction,
     input  wire [31:0] PC_IF,
     input  wire RegWrite_MEM,
@@ -41,7 +41,7 @@ module ID(
     wire [31:0] Immediate_d;
 
     always @(posedge clock) begin
-        if (reset) begin
+        if (reset || Discard_ID) begin
             PC_ID <= 32'd0;
             {Branch_ID, Jump_ID, MemWrite_ID} <= 3'b000;
             {ALUOp_ID, MemtoReg_ID, RegWrite_ID, ALUSrc_ID} <= 6'b0;

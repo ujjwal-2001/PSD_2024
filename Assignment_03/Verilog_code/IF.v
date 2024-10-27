@@ -16,6 +16,8 @@
 module IF(
     input  wire clock, reset, PCSrc,
     input  wire [31:0] PCBranch,
+    input  wire PC_en,
+    input  wire IF_en,
     output wire [31:0] Instruction,
     output reg  [31:0] PC
 );
@@ -28,8 +30,8 @@ module IF(
             PC      <= 32'd0;
         end
         else begin
-            PC_reg  <= (PCSrc) ? PCBranch : PC_reg + 32'd1;
-            PC      <= PC_reg;
+            PC_reg  <= (PC_en)? (PCSrc) ? PCBranch : PC_reg + 32'd1 : PC_reg;
+            PC      <= (IF_en)? PC_reg : PC;
         end
     end
 
@@ -40,7 +42,7 @@ module IF(
         .addra(10'd0),
         .dina(32'd0),
         .clkb(clock),
-        .enb(1'b1),
+        .enb(IF_en),
         .addrb(PC_reg[9:0]),
         .doutb(Instruction)
     );

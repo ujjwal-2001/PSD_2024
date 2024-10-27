@@ -110,7 +110,19 @@ module CPU(
     end
 
     // Stall unit - data and control hazards
+    reg PC_en, IF_en, Discard_ID;
 
+    always@(*)begin        // Stall unit combinational logic
+        if((lw_ID || lh_ID || lhu_ID || lb_ID || lbu_ID) && (WriteReg_ID == Instruction[19:15] || WriteReg_ID == Instruction[24:20]))begin
+            PC_en = 0;
+            IF_en = 0;
+            Discard_ID = 1;  
+        end else begin
+            PC_en = 1;
+            IF_en = 1;
+            Discard_ID = 0;
+        end
+    end
 
     // Write Back stage
     assign WriteData = (MemtoReg_MEM[1])? Immediate_MEM : (MemtoReg_MEM[0])? ReadData : ALUResult_MEM;
@@ -133,6 +145,8 @@ module CPU(
         .reset(reset),
         .PCSrc(PCSrc),
         .PCBranch(PCBranch),
+        .PC_en(PC_en),
+        .IF_en(IF_en),
         .Instruction(Instruction),
         .PC(PC)
     );
@@ -140,6 +154,7 @@ module CPU(
     ID ID(                  // Instruction decode
         .clock(clock),
         .reset(reset),
+        .Discard_ID(Discard_ID),
         .Instruction(Instruction),
         .PC_IF(PC),
         .RegWrite_MEM(RegWrite_MEM),
