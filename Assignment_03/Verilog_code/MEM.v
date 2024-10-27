@@ -23,7 +23,7 @@ module MEM(
     input wire sw_EXE, sh_EXE, sb_EXE,
     input wire lw_EXE, lh_EXE, lhu_EXE, lb_EXE, lbu_EXE,
     input wire [4:0] WriteReg_EXE,
-    input wire [31:0] ALUResult, WriteData, Immediate_EXE,
+    input wire [31:0] ALUResult, MemWriteData, Immediate_EXE,
     output reg [31:0] ReadData, ALUResult_MEM, Immediate_MEM,
     output reg [1:0] MemtoReg_MEM,
     output reg RegWrite_MEM,
@@ -53,7 +53,7 @@ module MEM(
     DataMem DataMem(                    // Data memory
         .clock(clock),
         .Address(ALUResult),
-        .WriteData(WriteData),
+        .WriteData(MemWriteData),
         .MemWrite(MemWrite_EXE),
         .sw(sw_EXE),
         .sh(sh_EXE),

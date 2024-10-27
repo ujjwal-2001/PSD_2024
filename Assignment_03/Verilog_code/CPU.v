@@ -32,7 +32,7 @@ module CPU(
     wire [31:0] Instruction;
     wire [3:0] FuncCode;
     wire [31:0] PCBranch, WriteData;
-    reg  [31:0] WriteData_WB;
+    reg  [31:0] WriteData_WB, MemWriteData;
     wire PCSrc;
     wire RegWrite_ID, RegWrite_EXE, RegWrite_MEM, RegWrite_WB;
     wire [4:0] WriteReg_ID, WriteReg_EXE, WriteReg_MEM, WriteReg_WB;
@@ -107,7 +107,7 @@ module CPU(
     end
 
     // Stall unit - data and control hazards
-    
+
 
     // Write Back stage
     assign WriteData = (MemtoReg_MEM[1])? Immediate_MEM : (MemtoReg_MEM[0])? ReadData : ALUResult_MEM;
@@ -196,8 +196,8 @@ module CPU(
         .lhu_ID(lhu_ID),
         .lb_ID(lb_ID),
         .lbu_ID(lbu_ID),
-        .ReadData1(ForwardDataA),
-        .ReadData2(ForwardDataB),
+        .ForwardDataA(ForwardDataA),
+        .ForwardDataA(ForwardDataB),
         .WriteReg_ID(WriteReg_ID),
         .Immediate(Immediate),
         .FuncCode(FuncCode),
@@ -218,7 +218,7 @@ module CPU(
         .lbu_EXE(lbu_EXE),
         .PCBranch(PCBranch),
         .Immediate_EXE(Immediate_EXE),
-        .WriteData(WriteData),
+        .MemWriteData(MemWriteData),
         .WriteReg_EXE(WriteReg_EXE)
     );
 
@@ -240,7 +240,7 @@ module CPU(
         .lbu_EXE(lbu_EXE),
         .WriteReg_EXE(WriteReg_EXE),
         .ALUResult(ALUResult),
-        .WriteData(WriteData),
+        .MemWriteData(MemWriteData),
         .Immediate_EXE(Immediate_EXE),
         .ReadData(ReadData),
         .ALUResult_MEM(ALUResult_MEM),
