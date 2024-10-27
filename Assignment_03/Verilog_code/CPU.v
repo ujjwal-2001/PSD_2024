@@ -8,18 +8,9 @@
 // ===================================================//
 
 //--------------------------------------------DESCRIPTION---------------------------------------------//
-// This is a 32-bit RISC-V single-cycle processor module that implements a simple 32-bit RISC-V processor.
-// The processor has a 32-bit instruction memory, a 32-bit data memory, a register file, an ALU, an ALU
-// control unit, a control unit, and an immediate generator. The processor executes instructions in a
-// single cycle. The processor has the following components:
-// 1. Instruction memory: A 32-bit instruction memory that stores the instructions to be executed.
-// 2. Data memory: A 32-bit data memory that stores the data to be read and written.
-// 3. Register file: A register file that stores the register values.
-// 4. ALU: An arithmetic logic unit that performs arithmetic and logical operations.
-// 5. ALU control unit: An ALU control unit that generates a 4-bit control signal based on the 2-bit ALUOp
-//    and 4-bit FuncCode inputs.
-// 6. Control unit: A control unit that generates control signals based on the opcode of the instruction.
-// 7. Immediate generator: An immediate generator that generates the immediate value for the instruction.
+// This is the top-level module of the 32-bit RISC-V 5-stage pipelined processor. The module connects
+// the five stages of the pipeline - IF, ID, EXE, MEM, and WB. The module also contains the data
+// forwarding unit and the stall unit to handle data and control hazards.
 //----------------------------------------------------------------------------------------------------//
 
 module CPU(
@@ -41,9 +32,10 @@ module CPU(
     wire [31:0] Instruction;
     wire [3:0] FuncCode;
     wire [31:0] PCBranch, WriteData;
+    reg  [31:0] WriteData_WB;
     wire PCSrc;
-    wire RegWrite_ID, RegWrite_EXE, RegWrite_MEM;
-    wire [4:0] WriteReg_ID, WriteReg_EXE, WriteReg_MEM;
+    wire RegWrite_ID, RegWrite_EXE, RegWrite_MEM, RegWrite_WB;
+    wire [4:0] WriteReg_ID, WriteReg_EXE, WriteReg_MEM, WriteReg_WB;
     wire Branch_ID, Branch_EXE;
     wire Jump_ID, Jump_EXE;
     wire [1:0] ALUOp_ID;
@@ -64,13 +56,74 @@ module CPU(
     wire [31:0] ALUResult, ALUResult_MEM;
 
     // Data Forwarding unit - data hazards
+    reg [1:0] ForwardA, ForwardB;
+    reg [31:0] ForwardDataA, ForwardDataB;
+    wire [4:0] ReadReg1_ID, ReadReg2_ID;
 
+    always@(*) begin        // Forwarding unit combinational logic
+        if(RegWrite_EXE && WriteReg_EXE!=0 && WriteReg_EXE==ReadReg1_ID)begin
+            ForwardA = 2'b11;
+        end
+        else if(RegWrite_MEM && WriteReg_MEM!=0 && WriteReg_MEM==ReadReg1_ID)begin
+            ForwardA = 2'b10;
+        end
+        else if(RegWrite_WB && WriteReg_WB!=0 && WriteReg_WB==ReadReg1_ID)begin
+            ForwardA = 2'b01;
+        end
+        else begin
+            ForwardA = 2'b00;
+        end
+
+        if(RegWrite_EXE && WriteReg_EXE!=0 && WriteReg_EXE==ReadReg2_ID)begin
+            ForwardB = 2'b11;
+        end
+        else if(RegWrite_MEM && WriteReg_MEM!=0 && WriteReg_MEM==ReadReg2_ID)begin
+            ForwardB = 2'b10;
+        end
+        else if(RegWrite_WB && WriteReg_WB!=0 && WriteReg_WB==ReadReg2_ID)begin
+            ForwardB = 2'b01;
+        end
+        else begin
+            ForwardB = 2'b00;
+        end
+    end
+
+    always@(*)begin         // Forwarding unit data selection/mux
+        case(ForwardA)
+            2'b00: ForwardDataA = ReadData1;
+            2'b01: ForwardDataA = WriteData_WB;
+            2'b10: ForwardDataA = WriteData;
+            2'b11: ForwardDataA = ALUResult;
+            default: ForwardDataA = ReadData1;
+        endcase
+
+        case(ForwardB)
+            2'b00: ForwardDataB = ReadData2;
+            2'b01: ForwardDataB = WriteData_WB;
+            2'b10: ForwardDataB = WriteData;
+            2'b11: ForwardDataB = ALUResult;
+            default: ForwardDataB = ReadData2;
+        endcase
+    end
 
     // Stall unit - data and control hazards
-
+    
 
     // Write Back stage
     assign WriteData = (MemtoReg_MEM[1])? Immediate_MEM : (MemtoReg_MEM[0])? ReadData : ALUResult_MEM;
+
+    always@(posedge clock)begin
+        if(reset)begin
+            WriteData_WB <= 0;
+            RegWrite_WB <= 0;
+            WriteReg_WB <= 0;
+        end
+        else begin
+            WriteData_WB <= WriteData;
+            RegWrite_WB <= RegWrite_MEM;
+            WriteReg_WB <= WriteReg_MEM;
+        end
+    end
 
     IF IF(                  // Instruction fetch
         .clock(clock),
@@ -105,6 +158,8 @@ module CPU(
         .lhu_ID(lhu_ID),
         .lb_ID(lb_ID),
         .lbu_ID(lbu_ID),
+        .ReadReg1_ID(ReadReg1_ID),
+        .ReadReg2_ID(ReadReg2_ID),
         .ReadData1(ReadData1),
         .ReadData2(ReadData2),
         .WriteReg_ID(WriteReg_ID),
@@ -141,8 +196,8 @@ module CPU(
         .lhu_ID(lhu_ID),
         .lb_ID(lb_ID),
         .lbu_ID(lbu_ID),
-        .ReadData1(ReadData1),
-        .ReadData2(ReadData2),
+        .ReadData1(ForwardDataA),
+        .ReadData2(ForwardDataB),
         .WriteReg_ID(WriteReg_ID),
         .Immediate(Immediate),
         .FuncCode(FuncCode),

@@ -28,6 +28,7 @@ module ID(
     output reg  lw_ID, lh_ID, lhu_ID, lb_ID, lbu_ID,
     output wire [31:0] ReadData1, ReadData2,
     output reg  [4:0]  WriteReg_ID,
+    output reg  [4:0]  ReadReg1_ID, ReadReg2_ID,
     output reg  [31:0] RF1, RF2, RF3, RF4, RF5, RF6, RF7, RF8, RF9, RF10,
     output reg  [31:0] Immediate,
     output reg  [3:0]  FuncCode
@@ -46,6 +47,7 @@ module ID(
             {ALUOp_ID, MemtoReg_ID, RegWrite_ID, ALUSrc_ID} <= 6'b0;
             {sw_ID, sh_ID, sb_ID} <= 3'b000;
             {lw_ID, lh_ID, lhu_ID, lb_ID, lbu_ID} <= 5'b00000;
+            {ReadReg1_ID, ReadReg2_ID} <= 10'b00000;
             WriteReg_ID <= 5'b00000;
             Immediate <= 32'd0;
             FuncCode <= 4'd0;
@@ -61,6 +63,8 @@ module ID(
             ALUSrc_ID <= ALUSrc;
             {sw_ID, sh_ID, sb_ID} <= {sw, sh, sb};
             {lw_ID, lh_ID, lhu_ID, lb_ID, lbu_ID} <= {lw, lh, lhu, lb, lbu};
+            ReadReg1_ID <= Instruction[19:15];
+            ReadReg2_ID <= Instruction[24:20];
             WriteReg_ID <= Instruction[11:7];
             Immediate <= Immediate_d;
             FuncCode  <= {Instruction[30], Instruction[14:12]};
