@@ -25,14 +25,15 @@ module EXE(
     input  wire [4:0]  WriteReg_ID,
     input  wire [31:0] Immediate,
     input  wire [3:0]  FuncCode,
+    output wire PCSrc,
     output reg  [31:0] ALUResult,
-    output reg  Zero,
     output reg  Branch_EXE, Jump_EXE, MemWrite_EXE, 
     output reg  [1:0]  MemtoReg_EXE,
     output reg  RegWrite_EXE,
     output reg  sw_EXE, sh_EXE, sb_EXE,
     output reg  lw_EXE, lh_EXE, lhu_EXE, lb_EXE, lbu_EXE,
-    output reg  [31:0] PCBranch, Immediate_EXE,
+    output wire [31:0] PCBranch,
+    output reg  [31:0] Immediate_EXE,
     output reg  [31:0] MemWriteData,
     output reg  [4:0]  WriteReg_EXE
 );
@@ -40,32 +41,28 @@ module EXE(
     wire [3:0] ALUCtl;
     wire [31:0] B;
     wire [31:0] ALUResult_d;
-    wire Zero_d;
+    wire Zero;
 
-    assign B = (ALUSrc_ID) ? Immediate : ForwardDataB;
+    assign B        = (ALUSrc_ID) ? Immediate : ForwardDataB;
+    assign PCSrc    = (Branch_ID & Zero) | Jump_ID;
+    assign PCBranch = PC_ID + Immediate;
 
     always@(posedge clock) begin
         if (reset) begin
-            ALUResult <= 32'd0;
-            Zero      <= 1'b0;
+            ALUResult     <= 32'd0;
             {Branch_EXE, Jump_EXE, MemWrite_EXE, MemtoReg_EXE, RegWrite_EXE}   <= 0;
             {sw_EXE, sh_EXE, sb_EXE, lw_EXE, lh_EXE, lhu_EXE, lb_EXE, lbu_EXE} <= 0;
-            PCBranch  <= 32'd0;
-            MemWriteData <= 32'd0;
+            MemWriteData  <= 32'd0;
             WriteReg_EXE  <= 5'd0;
             Immediate_EXE <= 32'd0;
         end
         else begin
-            ALUResult <= ALUResult_d;
-            Zero      <= Zero_d;
-            Branch_EXE <= Branch_ID;
-            Jump_EXE   <= Jump_ID;
-            MemWrite_EXE <= MemWrite_ID;
-            MemtoReg_EXE <= MemtoReg_ID;
-            RegWrite_EXE <= RegWrite_ID;
+            ALUResult     <= ALUResult_d;
+            MemWrite_EXE  <= MemWrite_ID;
+            MemtoReg_EXE  <= MemtoReg_ID;
+            RegWrite_EXE  <= RegWrite_ID;
             {sw_EXE, sh_EXE, sb_EXE} <= {sw_ID, sh_ID, sb_ID};
             {lw_EXE, lh_EXE, lhu_EXE, lb_EXE, lbu_EXE} <= {lw_ID, lh_ID, lhu_ID, lb_ID, lbu_ID};
-            PCBranch  <= PC_ID + Immediate;
             MemWriteData  <= ForwardDataB;
             WriteReg_EXE  <= WriteReg_ID;
             Immediate_EXE <= Immediate;
@@ -83,7 +80,7 @@ module EXE(
         .A(ForwardDataA),
         .B(B),
         .ALUResult(ALUResult_d),
-        .Zero(Zero_d)
+        .Zero(Zero)
     );
 
 endmodule

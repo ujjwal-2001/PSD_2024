@@ -42,32 +42,32 @@ module ID(
 
     always @(posedge clock) begin
         if (reset || Discard_ID) begin
-            PC_ID <= 32'd0;
-            {Branch_ID, Jump_ID, MemWrite_ID} <= 3'b000;
+            PC_ID       <= 32'd0;
+            {Branch_ID, Jump_ID, MemWrite_ID}    <= 3'b000;
             {ALUOp_ID, MemtoReg_ID, RegWrite_ID, ALUSrc_ID} <= 6'b0;
-            {sw_ID, sh_ID, sb_ID} <= 3'b000;
             {lw_ID, lh_ID, lhu_ID, lb_ID, lbu_ID} <= 5'b00000;
-            {ReadReg1_ID, ReadReg2_ID} <= 10'b00000;
+            {sw_ID, sh_ID, sb_ID}       <= 3'b000;
+            {ReadReg1_ID, ReadReg2_ID}  <= 10'b00000;
             WriteReg_ID <= 5'b00000;
-            Immediate <= 32'd0;
-            FuncCode <= 4'd0;
+            Immediate   <= 32'd0;
+            FuncCode    <= 4'd0;
         end
         else begin
-            PC_ID <= PC_IF;
-            Branch_ID <= Branch;
-            Jump_ID <= Jump;
+            PC_ID       <= PC_IF;
+            Branch_ID   <= Branch;
+            Jump_ID     <= Jump;
             MemWrite_ID <= MemWrite;
-            ALUOp_ID <= ALUOp;
+            ALUOp_ID    <= ALUOp;
             MemtoReg_ID <= MemtoReg;
             RegWrite_ID <= RegWrite;
-            ALUSrc_ID <= ALUSrc;
+            ALUSrc_ID   <= ALUSrc;
             {sw_ID, sh_ID, sb_ID} <= {sw, sh, sb};
             {lw_ID, lh_ID, lhu_ID, lb_ID, lbu_ID} <= {lw, lh, lhu, lb, lbu};
             ReadReg1_ID <= Instruction[19:15];
             ReadReg2_ID <= Instruction[24:20];
             WriteReg_ID <= Instruction[11:7];
-            Immediate <= Immediate_d;
-            FuncCode  <= {Instruction[30], Instruction[14:12]};
+            Immediate   <= Immediate_d;
+            FuncCode    <= {Instruction[30], Instruction[14:12]};
         end
     end
 

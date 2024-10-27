@@ -17,23 +17,19 @@
 module MEM(
     input  wire clock,       // Clock
     input  wire reset,       // Reset
-    input  wire Branch_EXE, Jump_EXE, MemWrite_EXE,
+    input  wire MemWrite_EXE,
     input  wire [1:0] MemtoReg_EXE,
     input  wire RegWrite_EXE,
     input  wire sw_EXE, sh_EXE, sb_EXE,
     input  wire lw_EXE, lh_EXE, lhu_EXE, lb_EXE, lbu_EXE,
     input  wire [4:0] WriteReg_EXE,
     input  wire [31:0] ALUResult, MemWriteData, Immediate_EXE,
-    input  wire Zero,
     output reg  [31:0] ALUResult_MEM, Immediate_MEM,
     output wire [31:0] ReadData,
     output reg  [1:0] MemtoReg_MEM,
     output reg  RegWrite_MEM,
-    output wire PCSrc,
     output reg  [4:0] WriteReg_MEM
 );
-
-    assign PCSrc = (Branch_EXE & Zero) | Jump_EXE;
 
     always@(posedge clock)begin
         if(reset)begin

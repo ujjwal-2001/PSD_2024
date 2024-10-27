@@ -110,17 +110,30 @@ module CPU(
     end
 
     // Stall unit - data and control hazards
-    reg PC_en, IF_en, Discard_ID;
+    reg PC_en, IF_en, Discard_load, Discard_branch, Insert_NOP;
+    wire Discard_ID;
+
+    assign Discard_ID = Discard_load | Discard_branch;
 
     always@(*)begin        // Stall unit combinational logic
+        // Stalling for data hazards - load-use
         if((lw_ID || lh_ID || lhu_ID || lb_ID || lbu_ID) && (WriteReg_ID == Instruction[19:15] || WriteReg_ID == Instruction[24:20]))begin
             PC_en = 0;
             IF_en = 0;
-            Discard_ID = 1;  
+            Discard_load = 1;  
         end else begin
             PC_en = 1;
             IF_en = 1;
-            Discard_ID = 0;
+            Discard_load = 0;
+        end
+
+        // Stalling for control hazards - branch - static branch prediction - not taken
+        if(PCSrc)begin
+            Insert_NOP = 1;
+            Discard_branch = 1;
+        end else begin
+            Insert_NOP = 0;
+            Discard_branch = 0;
         end
     end
 
@@ -147,6 +160,7 @@ module CPU(
         .PCBranch(PCBranch),
         .PC_en(PC_en),
         .IF_en(IF_en),
+        .Insert_NOP(Insert_NOP),
         .Instruction(Instruction),
         .PC(PC)
     );
@@ -220,7 +234,7 @@ module CPU(
         .Immediate(Immediate),
         .FuncCode(FuncCode),
         .ALUResult(ALUResult),
-        .Zero(Zero),
+        .PCSrc(PCSrc),
         .Branch_EXE(Branch_EXE),
         .Jump_EXE(Jump_EXE),
         .MemWrite_EXE(MemWrite_EXE),
@@ -243,8 +257,6 @@ module CPU(
     MEM MEM(                // Memory
         .clock(clock),
         .reset(reset),
-        .Branch_EXE(Branch_EXE),
-        .Jump_EXE(Jump_EXE),
         .MemWrite_EXE(MemWrite_EXE),
         .MemtoReg_EXE(MemtoReg_EXE),
         .RegWrite_EXE(RegWrite_EXE),
@@ -257,7 +269,6 @@ module CPU(
         .lb_EXE(lb_EXE),
         .lbu_EXE(lbu_EXE),
         .WriteReg_EXE(WriteReg_EXE),
-        .Zero(Zero),
         .ALUResult(ALUResult),
         .MemWriteData(MemWriteData),
         .Immediate_EXE(Immediate_EXE),
@@ -266,7 +277,6 @@ module CPU(
         .Immediate_MEM(Immediate_MEM),
         .MemtoReg_MEM(MemtoReg_MEM),
         .RegWrite_MEM(RegWrite_MEM),
-        .PCSrc(PCSrc),
         .WriteReg_MEM(WriteReg_MEM)
     );
 

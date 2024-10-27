@@ -8,7 +8,7 @@
 // ===================================================//
 
 //--------------------------------------------DESCRIPTION---------------------------------------------//
-// This is INstruction Fetch stage of the 32-bit RISC-V 5-stage pipelined processor. The instruction
+// This is Instruction Fetch stage of the 32-bit RISC-V 5-stage pipelined processor. The instruction
 // memory is a 32-bit memory that stores the instructions to be executed. Instruction memeory is a BRAM
 // whuch takes one cycle to read the instruction. 
 //----------------------------------------------------------------------------------------------------//
@@ -18,20 +18,27 @@ module IF(
     input  wire [31:0] PCBranch,
     input  wire PC_en,
     input  wire IF_en,
+    input  wire Insert_NOP,
     output wire [31:0] Instruction,
     output reg  [31:0] PC
 );
-
+    parameter [31:0] NOP = 32'h00000033; // No operation instruction: add x0, x0, x0
     reg [31:0] PC_reg;
+    wire [31:0] InstructionFromMem;
+    reg Insert_NOP_q;
+
+    assign Instruction = (Insert_NOP_q)? NOP : InstructionFromMem;
 
     always @(posedge clock) begin
         if (reset) begin
             PC_reg  <= 32'd0;
             PC      <= 32'd0;
+            Insert_NOP_q <= 1'b0;
         end
         else begin
             PC_reg  <= (PC_en)? (PCSrc) ? PCBranch : PC_reg + 32'd1 : PC_reg;
             PC      <= (IF_en)? PC_reg : PC;
+            Insert_NOP_q <= Insert_NOP;
         end
     end
 
@@ -44,7 +51,7 @@ module IF(
         .clkb(clock),
         .enb(IF_en),
         .addrb(PC_reg[9:0]),
-        .doutb(Instruction)
+        .doutb(InstructionFromMem)
     );
 
 endmodule
