@@ -32,10 +32,13 @@ module CPU(
     wire [31:0] Instruction;
     wire [3:0] FuncCode;
     wire [31:0] PCBranch, WriteData;
-    reg  [31:0] WriteData_WB, MemWriteData;
+    reg  [31:0] WriteData_WB;
+    wire [31:0] MemWriteData;
     wire PCSrc;
-    wire RegWrite_ID, RegWrite_EXE, RegWrite_MEM, RegWrite_WB;
-    wire [4:0] WriteReg_ID, WriteReg_EXE, WriteReg_MEM, WriteReg_WB;
+    wire RegWrite_ID, RegWrite_EXE, RegWrite_MEM;
+    reg  RegWrite_WB;
+    wire [4:0] WriteReg_ID, WriteReg_EXE, WriteReg_MEM;
+    reg  [4:0] WriteReg_WB;
     wire Branch_ID, Branch_EXE;
     wire Jump_ID, Jump_EXE;
     wire [1:0] ALUOp_ID;
@@ -197,7 +200,7 @@ module CPU(
         .lb_ID(lb_ID),
         .lbu_ID(lbu_ID),
         .ForwardDataA(ForwardDataA),
-        .ForwardDataA(ForwardDataB),
+        .ForwardDataB(ForwardDataB),
         .WriteReg_ID(WriteReg_ID),
         .Immediate(Immediate),
         .FuncCode(FuncCode),
@@ -239,6 +242,7 @@ module CPU(
         .lb_EXE(lb_EXE),
         .lbu_EXE(lbu_EXE),
         .WriteReg_EXE(WriteReg_EXE),
+        .Zero(Zero),
         .ALUResult(ALUResult),
         .MemWriteData(MemWriteData),
         .Immediate_EXE(Immediate_EXE),

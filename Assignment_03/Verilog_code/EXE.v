@@ -66,7 +66,7 @@ module EXE(
             {sw_EXE, sh_EXE, sb_EXE} <= {sw_ID, sh_ID, sb_ID};
             {lw_EXE, lh_EXE, lhu_EXE, lb_EXE, lbu_EXE} <= {lw_ID, lh_ID, lhu_ID, lb_ID, lbu_ID};
             PCBranch  <= PC_ID + Immediate;
-            MemWriteData <= ForwardDataB;
+            MemWriteData  <= ForwardDataB;
             WriteReg_EXE  <= WriteReg_ID;
             Immediate_EXE <= Immediate;
         end

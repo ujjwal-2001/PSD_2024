@@ -29,7 +29,7 @@ module ID(
     output wire [31:0] ReadData1, ReadData2,
     output reg  [4:0]  WriteReg_ID,
     output reg  [4:0]  ReadReg1_ID, ReadReg2_ID,
-    output reg  [31:0] RF1, RF2, RF3, RF4, RF5, RF6, RF7, RF8, RF9, RF10,
+    output wire [31:0] RF1, RF2, RF3, RF4, RF5, RF6, RF7, RF8, RF9, RF10,
     output reg  [31:0] Immediate,
     output reg  [3:0]  FuncCode
 );

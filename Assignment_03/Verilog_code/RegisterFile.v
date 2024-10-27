@@ -21,8 +21,8 @@ module RegisterFile (
     input  wire RegWrite,                // Write enable
     input  wire clock,                   // Clock signal
     input  wire reset,                   // Reset signal
-    output reg [31:0] ReadData1,        // Data read from Read1
-    output reg [31:0] ReadData2,        // Data read from Read2
+    output reg [31:0] ReadData1,         // Data read from Read1
+    output reg [31:0] ReadData2,         // Data read from Read2
     output wire [31:0] RF1,              // Register 1 data
     output wire [31:0] RF2,              // Register 2 data
     output wire [31:0] RF3,              // Register 3 data
