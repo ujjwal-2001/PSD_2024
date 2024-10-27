@@ -8,7 +8,10 @@
 // ===================================================//
 
 //--------------------------------------------DESCRIPTION---------------------------------------------//
-// 
+// This is the memory stage of the 32-bit RISC-V 5-stage pipelined processor. The data memory module is
+// used to read and write data. The control signals are passed to the data memory module to read and write
+// data. The output of the data memory is stored in the ReadData register. Data memory uses registered 
+// distributed memory to store the data. Thus, takes one cycle to read and write the data.
 //----------------------------------------------------------------------------------------------------//
 
 module MEM(

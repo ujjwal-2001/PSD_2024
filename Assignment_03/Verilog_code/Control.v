@@ -20,7 +20,7 @@
 // 6. ALUSrc    : ALU source control signal
 // 7. RegWrite  : Register write control signal
 // 8. sw        : Store word control signal
-// 9. sh       : Store halfword control signal
+// 9. sh        : Store halfword control signal
 // 10. sb       : Store byte control signal
 // 11. lw       : Load word control signal
 // 12. lh       : Load halfword control signal

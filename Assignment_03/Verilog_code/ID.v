@@ -8,27 +8,29 @@
 // ===================================================//
 
 //--------------------------------------------DESCRIPTION---------------------------------------------//
-// 
+// This is Instruction Decode stage of the 32-bit RISC-V 5-stage pipelined processor. The control signals
+// are generated based on the instruction opcode and funct3. The register file is read to get the values
+// of the registers. The immediate value is generated based on the instruction.
 //----------------------------------------------------------------------------------------------------//
 
 module ID(
-    input wire clock, reset,
-    input wire [31:0] Instruction,
-    input wire [31:0] PC_IF,
-    input wire RegWrite_MEM,
-    input wire [4:0] WriteReg_MEM,
-    input wire [31:0] WriteData,
-    output reg [31:0] PC_ID,
-    output reg Branch_ID, Jump_ID, MemWrite_ID, 
-    output reg [1:0] ALUOp_ID, MemtoReg_ID,
-    output reg RegWrite_ID, ALUSrc_ID,
-    output reg sw_ID, sh_ID, sb_ID,
-    output reg lw_ID, lh_ID, lhu_ID, lb_ID, lbu_ID,
+    input  wire clock, reset,
+    input  wire [31:0] Instruction,
+    input  wire [31:0] PC_IF,
+    input  wire RegWrite_MEM,
+    input  wire [4:0]  WriteReg_MEM,
+    input  wire [31:0] WriteData,
+    output reg  [31:0] PC_ID,
+    output reg  Branch_ID, Jump_ID, MemWrite_ID, 
+    output reg  [1:0]  ALUOp_ID, MemtoReg_ID,
+    output reg  RegWrite_ID, ALUSrc_ID,
+    output reg  sw_ID, sh_ID, sb_ID,
+    output reg  lw_ID, lh_ID, lhu_ID, lb_ID, lbu_ID,
     output wire [31:0] ReadData1, ReadData2,
-    output reg [4:0] WriteReg_ID,
-    output reg [31:0] RF1, RF2, RF3, RF4, RF5, RF6, RF7, RF8, RF9, RF10,
-    output reg [31:0] Immediate,
-    output reg [3:0] FuncCode
+    output reg  [4:0]  WriteReg_ID,
+    output reg  [31:0] RF1, RF2, RF3, RF4, RF5, RF6, RF7, RF8, RF9, RF10,
+    output reg  [31:0] Immediate,
+    output reg  [3:0]  FuncCode
 );
     wire Branch, Jump, MemWrite; 
     wire [1:0] ALUOp, MemtoReg;
@@ -65,7 +67,7 @@ module ID(
         end
     end
 
-    Control ControlUnit (
+    Control ControlUnit (                   // Control unit
         .funct3(Instruction[14:12]),
         .opcode(Instruction[6:0]),
         .Branch(Branch),
@@ -85,7 +87,7 @@ module ID(
         .lbu(lbu)
     );
 
-    RegisterFile RegisterFile (
+    RegisterFile RegisterFile (             // Register file
         .clock(clock),
         .reset(reset),
         .Read1(Instruction[19:15]),
@@ -107,7 +109,7 @@ module ID(
         .RF10(RF10)
     );
 
-    ImmGen ImmGen(                      // Immediate generator
+    ImmGen ImmGen(                          // Immediate generator
         .Instruction(Instruction),
         .Immediate(Immediate_d)
     );

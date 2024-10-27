@@ -63,9 +63,16 @@ module CPU(
     wire Zero;
     wire [31:0] ALUResult, ALUResult_MEM;
 
+    // Data Forwarding unit - data hazards
+
+
+    // Stall unit - data and control hazards
+
+
+    // Write Back stage
     assign WriteData = (MemtoReg_MEM[1])? Immediate_MEM : (MemtoReg_MEM[0])? ReadData : ALUResult_MEM;
 
-    IF IF(
+    IF IF(                  // Instruction fetch
         .clock(clock),
         .reset(reset),
         .PCSrc(PCSrc),
@@ -74,7 +81,7 @@ module CPU(
         .PC(PC)
     );
 
-    ID ID(
+    ID ID(                  // Instruction decode
         .clock(clock),
         .reset(reset),
         .Instruction(Instruction),
@@ -102,7 +109,7 @@ module CPU(
         .ReadData2(ReadData2),
         .WriteReg_ID(WriteReg_ID),
         .Immediate(Immediate),
-        .FuncCode(FuncCode)
+        .FuncCode(FuncCode),
         .RF1(RF1),
         .RF2(RF2),
         .RF3(RF3),
@@ -115,7 +122,7 @@ module CPU(
         .RF10(RF10)
     );
 
-    EXE EXE(
+    EXE EXE(                // Execute
         .clock(clock),
         .reset(reset),
         .PC_ID(PC_ID),
@@ -160,7 +167,7 @@ module CPU(
         .WriteReg_EXE(WriteReg_EXE)
     );
 
-    MEM MEM(
+    MEM MEM(                // Memory
         .clock(clock),
         .reset(reset),
         .Branch_EXE(Branch_EXE),
