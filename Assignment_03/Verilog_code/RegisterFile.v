@@ -39,15 +39,15 @@ module RegisterFile (
     integer i;
 
     // Assign data to the output registers
-    assign RF1 = RF[1]; 
-    assign RF2 = RF[2];
-    assign RF3 = RF[3];
-    assign RF4 = RF[4];
-    assign RF5 = RF[5];
-    assign RF6 = RF[6];
-    assign RF7 = RF[7];
-    assign RF8 = RF[8];
-    assign RF9 = RF[9];
+    assign RF1  = RF[1]; 
+    assign RF2  = RF[2];
+    assign RF3  = RF[3];
+    assign RF4  = RF[4];
+    assign RF5  = RF[5];
+    assign RF6  = RF[6];
+    assign RF7  = RF[7];
+    assign RF8  = RF[8];
+    assign RF9  = RF[9];
     assign RF10 = RF[10];
     
     // Write data to a register if RegWrite is high

@@ -23,11 +23,12 @@ module IF(
     output reg  [31:0] PC
 );
     parameter [31:0] NOP = 32'h00000033; // No operation instruction: add x0, x0, x0
-    reg [31:0] PC_reg;
-    wire [31:0] InstructionFromMem;
-    reg Insert_NOP_q;
 
-    assign Instruction = (Insert_NOP_q)? NOP : InstructionFromMem;
+    reg  [31:0] PC_reg;
+    reg  Insert_NOP_q;
+    wire [31:0] InstructionFromMem;
+    
+    assign Instruction = (Insert_NOP_q)? NOP : InstructionFromMem; // Insert NOP if required
 
     always @(posedge clock) begin
         if (reset) begin

@@ -14,18 +14,18 @@
 //----------------------------------------------------------------------------------------------------//
 
 module CPU(
-    input wire clock,       // Clock
-    input wire reset,       // Reset
-    output wire [31:0] RF1, // Register 1
-    output wire [31:0] RF2, // Register 2
-    output wire [31:0] RF3, // Register 3
-    output wire [31:0] RF4, // Register 4
-    output wire [31:0] RF5, // Register 5
-    output wire [31:0] RF6, // Register 6
-    output wire [31:0] RF7, // Register 7
-    output wire [31:0] RF8, // Register 8
-    output wire [31:0] RF9, // Register 9
-    output wire [31:0] RF10 // Register 10
+    input  wire clock,       // Clock
+    input  wire reset,       // Reset
+    output wire [31:0] RF1,  // Register 1
+    output wire [31:0] RF2,  // Register 2
+    output wire [31:0] RF3,  // Register 3
+    output wire [31:0] RF4,  // Register 4
+    output wire [31:0] RF5,  // Register 5
+    output wire [31:0] RF6,  // Register 6
+    output wire [31:0] RF7,  // Register 7
+    output wire [31:0] RF8,  // Register 8
+    output wire [31:0] RF9,  // Register 9
+    output wire [31:0] RF10  // Register 10
 );
 
     wire [31:0] PC, PC_ID;
@@ -92,18 +92,18 @@ module CPU(
 
     always@(*)begin         // Forwarding unit data selection/mux
         case(ForwardA)
-            2'b00: ForwardDataA = ReadData1;
-            2'b01: ForwardDataA = WriteData_WB;
-            2'b10: ForwardDataA = WriteData;
-            2'b11: ForwardDataA = ALUResult;
+            2'b00: ForwardDataA   = ReadData1;
+            2'b01: ForwardDataA   = WriteData_WB;
+            2'b10: ForwardDataA   = WriteData;
+            2'b11: ForwardDataA   = ALUResult;
             default: ForwardDataA = ReadData1;
         endcase
 
         case(ForwardB)
-            2'b00: ForwardDataB = ReadData2;
-            2'b01: ForwardDataB = WriteData_WB;
-            2'b10: ForwardDataB = WriteData;
-            2'b11: ForwardDataB = ALUResult;
+            2'b00: ForwardDataB   = ReadData2;
+            2'b01: ForwardDataB   = WriteData_WB;
+            2'b10: ForwardDataB   = WriteData;
+            2'b11: ForwardDataB   = ALUResult;
             default: ForwardDataB = ReadData2;
         endcase
     end
@@ -112,8 +112,9 @@ module CPU(
     wire PC_en, IF_en, Discard_load, Insert_NOP;
     wire Discard_ID;
     wire [4:0] Read1,Read2;
-    assign Read1  = Instruction[19:15];
-    assign Read2  = Instruction[24:20];
+
+    assign Read1  = Instruction[19:15];     // Read register 1
+    assign Read2  = Instruction[24:20];     // Read register 2
 
     assign Discard_load = ((lw_ID || lh_ID || lhu_ID || lb_ID || lbu_ID) && (WriteReg_ID == Read1 || WriteReg_ID == Read2))? 1 : 0;
     assign Discard_ID = Discard_load | PCSrc;

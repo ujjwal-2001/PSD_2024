@@ -43,7 +43,7 @@ module EXE(
     wire [31:0] ALUResult_d;
     wire Zero;
 
-    assign B        = (ALUSrc_ID) ? Immediate : ForwardDataB;
+    assign B        = (ALUSrc_ID)? Immediate : ForwardDataB;
     assign PCSrc    = (Branch_ID & Zero) | Jump_ID;
     assign PCBranch = PC_ID + Immediate;
 

@@ -38,14 +38,14 @@ module ReadAlign(
         endcase
 
         case({lb,lbu})
-            2'b01: Da15_8 = 8'd0;
-            2'b11: Da15_8 = {8{Da7_0[7]}};
+            2'b01: Da15_8   = 8'd0;
+            2'b11: Da15_8   = {8{Da7_0[7]}};
             default: Da15_8 = 8'b0;
         endcase
 
         case(Address[1])
-            1'b0: {Db15_8, Db7_0} = {DataOut[15:8], DataOut[7:0]};
-            1'b1: {Db15_8, Db7_0} = {DataOut[31:24], DataOut[23:16]}; 
+            1'b0: {Db15_8, Db7_0}    = {DataOut[15:8], DataOut[7:0]};
+            1'b1: {Db15_8, Db7_0}    = {DataOut[31:24], DataOut[23:16]}; 
             default: {Db15_8, Db7_0} = 16'b0;
         endcase
 
@@ -55,9 +55,9 @@ module ReadAlign(
         endcase
 
         case({lh,lhu})
-            2'b00: Dc23_16 = Da15_8;
-            2'b01: Dc23_16 = 8'd0;
-            2'b10: Dc23_16 = {8{Db15_8[7]}};
+            2'b00: Dc23_16   = Da15_8;
+            2'b01: Dc23_16   = 8'd0;
+            2'b10: Dc23_16   = {8{Db15_8[7]}};
             default: Dc23_16 = 8'b0;
         endcase
 
@@ -67,6 +67,5 @@ module ReadAlign(
         endcase
         
     end
-
 
 endmodule

@@ -32,16 +32,16 @@ module LedDisplay(
 
     always@(*)begin
         case(select)
-            4'd1: LED_temp = RF1;
-            4'd2: LED_temp = RF2;
-            4'd3: LED_temp = RF3;
-            4'd4: LED_temp = RF4;
-            4'd5: LED_temp = RF5;
-            4'd6: LED_temp = RF6;
-            4'd7: LED_temp = RF7;
-            4'd8: LED_temp = RF8;
-            4'd9: LED_temp = RF9;
-            4'd10: LED_temp = RF10;
+            4'd1: LED_temp    = RF1;
+            4'd2: LED_temp    = RF2;
+            4'd3: LED_temp    = RF3;
+            4'd4: LED_temp    = RF4;
+            4'd5: LED_temp    = RF5;
+            4'd6: LED_temp    = RF6;
+            4'd7: LED_temp    = RF7;
+            4'd8: LED_temp    = RF8;
+            4'd9: LED_temp    = RF9;
+            4'd10: LED_temp   = RF10;
             default: LED_temp = 16'b0;
         endcase
     end

@@ -124,6 +124,5 @@ module WriteAlign(
         D7_0 = WriteData[7:0];
 
     end
-
-
+    
 endmodule
