@@ -27,7 +27,7 @@ module EXE(
     input  wire [3:0]  FuncCode,
     output wire PCSrc,
     output reg  [31:0] ALUResult,
-    output reg  Branch_EXE, Jump_EXE, MemWrite_EXE, 
+    output reg  MemWrite_EXE, 
     output reg  [1:0]  MemtoReg_EXE,
     output reg  RegWrite_EXE,
     output reg  sw_EXE, sh_EXE, sb_EXE,
@@ -50,7 +50,7 @@ module EXE(
     always@(posedge clock) begin
         if (reset) begin
             ALUResult     <= 32'd0;
-            {Branch_EXE, Jump_EXE, MemWrite_EXE, MemtoReg_EXE, RegWrite_EXE}   <= 0;
+            {MemWrite_EXE, MemtoReg_EXE, RegWrite_EXE}   <= 0;
             {sw_EXE, sh_EXE, sb_EXE, lw_EXE, lh_EXE, lhu_EXE, lb_EXE, lbu_EXE} <= 0;
             MemWriteData  <= 32'd0;
             WriteReg_EXE  <= 5'd0;

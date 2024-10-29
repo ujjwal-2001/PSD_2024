@@ -39,6 +39,14 @@ module ID(
     wire sw, sh, sb;
     wire lw, lh, lhu, lb, lbu;
     wire [31:0] Immediate_d;
+    wire [4:0] Read1,Read2;
+    wire [6:0] opcode;
+    wire [2:0] funct3;
+
+    assign Read1  = Instruction[19:15];
+    assign Read2  = Instruction[24:20];
+    assign opcode = Instruction[6:0];
+    assign funct3 = Instruction[14:12];
 
     always @(posedge clock) begin
         if (reset || Discard_ID) begin
@@ -72,8 +80,8 @@ module ID(
     end
 
     Control ControlUnit (                   // Control unit
-        .funct3(Instruction[14:12]),
-        .opcode(Instruction[6:0]),
+        .funct3(funct3),
+        .opcode(opcode),
         .Branch(Branch),
         .Jump(Jump),
         .MemtoReg(MemtoReg),
@@ -94,8 +102,8 @@ module ID(
     RegisterFile RegisterFile (             // Register file
         .clock(clock),
         .reset(reset),
-        .Read1(Instruction[19:15]),
-        .Read2(Instruction[24:20]),
+        .Read1(Read1),
+        .Read2(Read2),
         .WriteReg(WriteReg_MEM),
         .WriteData(WriteData),
         .RegWrite(RegWrite_MEM),

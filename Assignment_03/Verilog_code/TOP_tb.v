@@ -24,7 +24,7 @@ module TOP_tb();
         reset1 = 1;
         reset2 = 1;
         #10 reset1 = 0;
-        #30 reset2 = 0;
+        #75 reset2 = 0;
         #10 select = 1;
     end
 
@@ -64,7 +64,7 @@ endmodule
 // 0x00000011   sw x5, 32(x0)	    0000001 00101 00000 010 00000 0100011
 // 0x00000012   addi x5, x0, 10	    000000001010 00000 000 00101 0010011
 // 0x00000013   sw x5, 36(x0)	    0000001 00101 00000 010 00100 0100011
-// 0x00000014	addi x5, x0, 0	    000000000000 00000 000 00101 0010011	Add immediate (I-type), x5 = 0
+// 0x00000014	addi x5, x0, 0	    000000000000 00000 000 00101 0010011	Add immediate (I-type), x5 = 0 (i)
 // 0x00000015	addi x6, x0, 0	    000000000000 00000 000 00110 0010011	Add immediate (I-type), x6 = 0 (base address of arr)
 // 0x00000016	addi x7, x0, 0	    000000000000 00000 000 00111 0010011	Add immediate (I-type), x7 = 0 (j)
 // 0x00000017	addi x8, x0, 10	    000000001010 00000 000 01000 0010011	Add immediate (I-type), x8 = 10 (array size)

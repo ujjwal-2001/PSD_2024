@@ -28,7 +28,7 @@ module CPU(
     output wire [31:0] RF10 // Register 10
 );
 
-    wire [31:0] PC, PC_ID, PC_EXE;
+    wire [31:0] PC, PC_ID;
     wire [31:0] Instruction;
     wire [3:0] FuncCode;
     wire [31:0] PCBranch, WriteData;
@@ -39,8 +39,8 @@ module CPU(
     reg  RegWrite_WB;
     wire [4:0] WriteReg_ID, WriteReg_EXE, WriteReg_MEM;
     reg  [4:0] WriteReg_WB;
-    wire Branch_ID, Branch_EXE;
-    wire Jump_ID, Jump_EXE;
+    wire Branch_ID;
+    wire Jump_ID;
     wire [1:0] ALUOp_ID;
     wire ALUSrc_ID;
     wire sw_ID, sw_EXE;
@@ -55,7 +55,6 @@ module CPU(
     wire [1:0] MemtoReg_ID, MemtoReg_EXE, MemtoReg_MEM;
     wire [31:0] ReadData1, ReadData2, ReadData;
     wire [31:0] Immediate, Immediate_EXE, Immediate_MEM;
-    wire Zero;
     wire [31:0] ALUResult, ALUResult_MEM;
 
     // Data Forwarding unit - data hazards
@@ -110,32 +109,17 @@ module CPU(
     end
 
     // Stall unit - data and control hazards
-    reg PC_en, IF_en, Discard_load, Discard_branch, Insert_NOP;
+    wire PC_en, IF_en, Discard_load, Insert_NOP;
     wire Discard_ID;
+    wire [4:0] Read1,Read2;
+    assign Read1  = Instruction[19:15];
+    assign Read2  = Instruction[24:20];
 
-    assign Discard_ID = Discard_load | Discard_branch;
-
-    always@(*)begin        // Stall unit combinational logic
-        // Stalling for data hazards - load-use
-        if((lw_ID || lh_ID || lhu_ID || lb_ID || lbu_ID) && (WriteReg_ID == Instruction[19:15] || WriteReg_ID == Instruction[24:20]))begin
-            PC_en = 0;
-            IF_en = 0;
-            Discard_load = 1;  
-        end else begin
-            PC_en = 1;
-            IF_en = 1;
-            Discard_load = 0;
-        end
-
-        // Stalling for control hazards - branch - static branch prediction - not taken
-        if(PCSrc)begin
-            Insert_NOP = 1;
-            Discard_branch = 1;
-        end else begin
-            Insert_NOP = 0;
-            Discard_branch = 0;
-        end
-    end
+    assign Discard_load = ((lw_ID || lh_ID || lhu_ID || lb_ID || lbu_ID) && (WriteReg_ID == Read1 || WriteReg_ID == Read2))? 1 : 0;
+    assign Discard_ID = Discard_load | PCSrc;
+    assign Insert_NOP = PCSrc;
+    assign PC_en = ~Discard_load;
+    assign IF_en = ~Discard_load;
 
     // Write Back stage
     assign WriteData = (MemtoReg_MEM[1])? Immediate_MEM : (MemtoReg_MEM[0])? ReadData : ALUResult_MEM;
@@ -235,8 +219,6 @@ module CPU(
         .FuncCode(FuncCode),
         .ALUResult(ALUResult),
         .PCSrc(PCSrc),
-        .Branch_EXE(Branch_EXE),
-        .Jump_EXE(Jump_EXE),
         .MemWrite_EXE(MemWrite_EXE),
         .MemtoReg_EXE(MemtoReg_EXE),
         .RegWrite_EXE(RegWrite_EXE),

@@ -25,11 +25,13 @@ module MEM(
     input  wire [4:0] WriteReg_EXE,
     input  wire [31:0] ALUResult, MemWriteData, Immediate_EXE,
     output reg  [31:0] ALUResult_MEM, Immediate_MEM,
-    output wire [31:0] ReadData,
+    output reg  [31:0] ReadData,
     output reg  [1:0] MemtoReg_MEM,
     output reg  RegWrite_MEM,
     output reg  [4:0] WriteReg_MEM
 );
+
+    wire [31:0] ReadData_d;
 
     always@(posedge clock)begin
         if(reset)begin
@@ -38,6 +40,7 @@ module MEM(
             MemtoReg_MEM  <= 2'b00;
             RegWrite_MEM  <= 1'b0;
             WriteReg_MEM  <= 5'd0;
+            ReadData      <= 32'd0;
         end
         else begin
             ALUResult_MEM <= ALUResult;
@@ -45,6 +48,7 @@ module MEM(
             MemtoReg_MEM  <= MemtoReg_EXE;
             RegWrite_MEM  <= RegWrite_EXE;
             WriteReg_MEM  <= WriteReg_EXE;
+            ReadData      <= ReadData_d;
         end
     end
 
@@ -61,7 +65,7 @@ module MEM(
         .lhu(lhu_EXE),
         .lbu(lbu_EXE),
         .lb(lb_EXE),
-        .ReadData(ReadData)
+        .ReadData(ReadData_d)
     );
 
 endmodule

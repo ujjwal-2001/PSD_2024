@@ -31,7 +31,7 @@ module DataMem(
     wire [1:0] Offset;
 
     assign LineAddress = Address[11:2];
-    assign Offset = Address[1:0];
+    assign Offset  = Address[1:0];
     assign DataIn0 = DataIn[7:0];
     assign DataIn1 = DataIn[15:8];
     assign DataIn2 = DataIn[23:16];
