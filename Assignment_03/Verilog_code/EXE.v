@@ -25,6 +25,7 @@ module EXE(
     input  wire [4:0]  WriteReg_ID,
     input  wire [31:0] Immediate,
     input  wire [3:0]  FuncCode,
+    input  wire hit,
     output wire PCSrc,
     output reg  [31:0] ALUResult,
     output reg  MemWrite_EXE, 
@@ -56,7 +57,7 @@ module EXE(
             WriteReg_EXE  <= 5'd0;
             Immediate_EXE <= 32'd0;
         end
-        else begin
+        else if (hit) begin
             ALUResult     <= ALUResult_d;
             MemWrite_EXE  <= MemWrite_ID;
             MemtoReg_EXE  <= MemtoReg_ID;

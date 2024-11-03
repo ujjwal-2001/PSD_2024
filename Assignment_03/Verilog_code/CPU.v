@@ -29,6 +29,7 @@ module CPU(
 );
 
     wire [31:0] PC, PC_ID;
+    wire hit;
     wire [31:0] Instruction;
     wire [3:0] FuncCode;
     wire [31:0] PCBranch, WriteData;
@@ -117,10 +118,10 @@ module CPU(
     assign Read2  = Instruction[24:20];     // Read register 2
 
     assign Discard_load = ((lw_ID || lh_ID || lhu_ID || lb_ID || lbu_ID) && (WriteReg_ID == Read1 || WriteReg_ID == Read2))? 1 : 0;
-    assign Discard_ID = Discard_load | PCSrc;
-    assign Insert_NOP = PCSrc;
-    assign PC_en = ~Discard_load;
-    assign IF_en = ~Discard_load;
+    assign Discard_ID = (Discard_load | PCSrc) & hit;
+    assign Insert_NOP = PCSrc & hit;
+    assign PC_en = ~Discard_load & hit;
+    assign IF_en = ~Discard_load & hit;
 
     // Write Back stage
     assign WriteData = (MemtoReg_MEM[1])? Immediate_MEM : (MemtoReg_MEM[0])? ReadData : ALUResult_MEM;
@@ -142,6 +143,7 @@ module CPU(
         .clock(clock),
         .reset(reset),
         .PCSrc(PCSrc),
+        .hit(hit),
         .PCBranch(PCBranch),
         .PC_en(PC_en),
         .IF_en(IF_en),
@@ -156,6 +158,7 @@ module CPU(
         .Discard_ID(Discard_ID),
         .Instruction(Instruction),
         .PC_IF(PC),
+        .hit(hit),
         .RegWrite_MEM(RegWrite_MEM),
         .WriteReg_MEM(WriteReg_MEM),
         .WriteData(WriteData),
@@ -198,6 +201,7 @@ module CPU(
         .clock(clock),
         .reset(reset),
         .PC_ID(PC_ID),
+        .hit(hit),
         .Branch_ID(Branch_ID),
         .Jump_ID(Jump_ID),
         .MemWrite_ID(MemWrite_ID),
@@ -240,6 +244,7 @@ module CPU(
     MEM MEM(                // Memory
         .clock(clock),
         .reset(reset),
+        .hit(hit),
         .MemWrite_EXE(MemWrite_EXE),
         .MemtoReg_EXE(MemtoReg_EXE),
         .RegWrite_EXE(RegWrite_EXE),

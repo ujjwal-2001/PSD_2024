@@ -24,7 +24,7 @@ module TOP_tb();
         reset1 = 1;
         reset2 = 1;
         #10 reset1 = 0;
-        #75 reset2 = 0;
+        #115 reset2 = 0;
         #10 select = 1;
     end
 

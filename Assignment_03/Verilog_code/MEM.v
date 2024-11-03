@@ -18,6 +18,7 @@ module MEM(
     input  wire clock,       // Clock
     input  wire reset,       // Reset
     input  wire MemWrite_EXE,
+    input  wire hit,
     input  wire [1:0] MemtoReg_EXE,
     input  wire RegWrite_EXE,
     input  wire sw_EXE, sh_EXE, sb_EXE,
@@ -42,7 +43,7 @@ module MEM(
             WriteReg_MEM  <= 5'd0;
             ReadData      <= 32'd0;
         end
-        else begin
+        else if (hit) begin
             ALUResult_MEM <= ALUResult;
             Immediate_MEM <= Immediate_EXE;
             MemtoReg_MEM  <= MemtoReg_EXE;
@@ -57,14 +58,14 @@ module MEM(
         .Address(ALUResult),
         .WriteData(MemWriteData),
         .MemWrite(MemWrite_EXE),
-        .sw(sw_EXE),
-        .sh(sh_EXE),
-        .sb(sb_EXE),
-        .lw(lw_EXE),
-        .lh(lh_EXE),
-        .lhu(lhu_EXE),
-        .lbu(lbu_EXE),
-        .lb(lb_EXE),
+        .sw(sw_EXE & hit),
+        .sh(sh_EXE & hit),
+        .sb(sb_EXE & hit),
+        .lw(lw_EXE & hit),
+        .lh(lh_EXE & hit),
+        .lhu(lhu_EXE & hit),
+        .lbu(lbu_EXE & hit),
+        .lb(lb_EXE & hit),
         .ReadData(ReadData_d)
     );
 

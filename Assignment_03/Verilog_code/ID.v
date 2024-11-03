@@ -20,6 +20,7 @@ module ID(
     input  wire RegWrite_MEM,
     input  wire [4:0]  WriteReg_MEM,
     input  wire [31:0] WriteData,
+    input  wire hit,
     output reg  [31:0] PC_ID,
     output reg  Branch_ID, Jump_ID, MemWrite_ID, 
     output reg  [1:0]  ALUOp_ID, MemtoReg_ID,
@@ -60,7 +61,7 @@ module ID(
             Immediate   <= 32'd0;
             FuncCode    <= 4'd0;
         end
-        else begin
+        else if (hit) begin
             PC_ID       <= PC_IF;
             Branch_ID   <= Branch;
             Jump_ID     <= Jump;
@@ -106,7 +107,8 @@ module ID(
         .Read2(Read2),
         .WriteReg(WriteReg_MEM),
         .WriteData(WriteData),
-        .RegWrite(RegWrite_MEM),
+        .RegWrite(RegWrite_MEM & hit),
+        .ReadEn(hit),
         .ReadData1(ReadData1),
         .ReadData2(ReadData2),
         .RF1(RF1),

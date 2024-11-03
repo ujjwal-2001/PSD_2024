@@ -19,6 +19,7 @@ module RegisterFile (
     input  wire [4:0] WriteReg,          // Register to write to
     input  wire [31:0] WriteData,        // Data to be written
     input  wire RegWrite,                // Write enable
+    input  wire ReadEn,                  // Read enable
     input  wire clock,                   // Clock signal
     input  wire reset,                   // Reset signal
     output reg [31:0] ReadData1,         // Data read from Read1
@@ -66,8 +67,8 @@ module RegisterFile (
         end
 
         // Read data from the specified registers
-        ReadData1 <= RF[Read1];   
-        ReadData2 <= RF[Read2];
+        ReadData1 <= (ReadEn)? RF[Read1] : ReadData1;   
+        ReadData2 <= (ReadEn)? RF[Read2] : ReadData2;
 
     end
 
