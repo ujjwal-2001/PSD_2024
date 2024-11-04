@@ -1,5 +1,5 @@
 # Design and Implementation of a 32-bit 5-Stage Pipelined RISC-V Processor
-**Date**: Sept-2024
+**Date**: Nov-2024
 
 ## Table of Contents
 1. [Author](#author)
@@ -86,11 +86,15 @@ The 32-bit 5-stage pipelined RISC-V processor follows a multi-cycle datapath des
 
 Instruction Memory with Instruction Cache: This module stores instructions to be executed and incorporates a direct-mapped instruction cache (32x32 bits) with a block size of four words. The cache enhances instruction fetch performance by reducing memory access time, while the instruction memory (1024x32 bits) is the primary storage.
 
--**Register File:** The processor includes a register file with 32 registers (x0 to x31), where x0 is hardwired to zero. This file supports simultaneous reading of two source registers and writing to one destination register, ensuring efficient data flow through the pipeline stages.
--**ALU (Arithmetic Logic Unit):** The ALU performs arithmetic and logical operations such as addition, subtraction, AND, OR, and comparisons. Operands from the register file or immediate values are processed here during the Execute (EX) stage, with results forwarded to subsequent stages as needed.
--**Immediate Generator:** The immediate generator extracts immediate values for I-type and S-type instructions, extending them to 32 bits to ensure proper use in calculations or memory addressing, consistent with the RISC-V instruction format.
--**Data Memory:** The processor includes a data memory module for loading and storing operations during the MEM stage. The memory access is word-aligned and interacts with the register file to handle data retrieval and storage as load/store instructions specify.
--**Hazard Detection and Forwarding Units:** To maintain pipeline efficiency, the design includes hazard detection and forwarding units, which identify data hazards and enable forwarding from EX, MEM, and WB stages to prevent pipeline stalls. A stall unit is also implemented to handle load-use instruction, branch instruction, and cache miss, preventing data hazards in cases where data dependencies exist.
+- **Register File:** The processor includes a register file with 32 registers (x0 to x31), where x0 is hardwired to zero. This file supports simultaneous reading of two source registers and writing to one destination register, ensuring efficient data flow through the pipeline stages.
+
+- **ALU (Arithmetic Logic Unit):** The ALU performs arithmetic and logical operations such as addition, subtraction, AND, OR, and comparisons. Operands from the register file or immediate values are processed here during the Execute (EX) stage, with results forwarded to subsequent stages as needed.
+
+- **Immediate Generator:** The immediate generator extracts immediate values for I-type and S-type instructions, extending them to 32 bits to ensure proper use in calculations or memory addressing, consistent with the RISC-V instruction format.
+
+- **Data Memory:** The processor includes a data memory module for loading and storing operations during the MEM stage. The memory access is word-aligned and interacts with the register file to handle data retrieval and storage as load/store instructions specify.
+
+- **Hazard Detection and Forwarding Units:** To maintain pipeline efficiency, the design includes hazard detection and forwarding units, which identify data hazards and enable forwarding from EX, MEM, and WB stages to prevent pipeline stalls. A stall unit is also implemented to handle load-use instruction, branch instruction, and cache miss, preventing data hazards in cases where data dependencies exist.
 
 #### Pipelined Datapath Execution
 
