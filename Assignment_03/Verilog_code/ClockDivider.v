@@ -8,7 +8,7 @@
 // ===================================================//
 
 //--------------------------------------------DESCRIPTION---------------------------------------------//
-// This module is a clock divider that divides the input clock signal by 4.
+// This module is a clock divider that divides the input clock signal by 2.
 //----------------------------------------------------------------------------------------------------//
 
 module ClockDivider(
@@ -17,17 +17,17 @@ module ClockDivider(
     output wire clock_div       // Divided clock
 );
 
-    reg [1:0] count;   // Counter
+    reg count;   // Counter
 
     always@(posedge clock or posedge reset)begin
         if(reset)begin
-            count <= 2'b00;
+            count <= 0;
         end
         else begin
             count <= count + 1;
         end
     end
 
-    assign clock_div = count[1];    // Divided clock
+    assign clock_div = count;    // Divided clock
 
 endmodule

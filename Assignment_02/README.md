@@ -38,9 +38,6 @@ The primary objective of this project is to build a functioning single-cycle pro
 
 To validate the processor’s functionality, the Bubble Sort algorithm was selected as the benchmark test. By running this sorting algorithm, we were able to verify the processor’s ability to handle complex data manipulation tasks. The results of the algorithm were stored in registers, and the final state was evaluated using the FPGA’s output capabilities. Timing and resource utilization were analyzed, demonstrating the processor’s compliance with FPGA constraints.
 
-This project serves as a critical step towards understanding CPU design at the hardware level and offers a foundation for more advanced processor architectures, including pipelined and multi-cycle designs.
-
-
 ## Processor Design
 
 ### Instruction Set Architecture

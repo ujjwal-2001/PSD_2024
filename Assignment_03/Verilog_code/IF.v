@@ -37,7 +37,7 @@ module IF(
     assign Tag   = CacheData[36:32];
     assign Valid = CacheData[37];
     assign hit   = (Tag == PC_reg[9:5]) & Valid;
-    assign CacheWe = ~hit & ~reset;
+    assign CacheWe = ~hit_q & ~reset;
     assign CacheWriteData = {1'b1, PC_reg_q[9:5], InstructionFromMem};
 
     assign Instruction_d = (Insert_NOP)? NOP : InstructionFromCache; // Insert NOP if required
