@@ -8,7 +8,7 @@
    1. [Instruction Set Architecture](#instruction-set-architecture)
    2. [Data-Path Design](#data-path-design)
    3. [Key Components of the Datapath](#key-components-of-the-datapath)
-   4. [Pipelined-Cycle Datapath Execution](#[pipelined-cycle-datapath-execution)
+   4. [Pipelined Datapath Execution](#pipelined-datapath-execution)
    5. [Clock Division and Display](#clock-division-and-display)
    6. [Level 0 Data-path Schematic](#level-0-data-path-schematic)
    7. [Level 1 Data-path Schematic](#level-1-data-path-schematic)
@@ -19,7 +19,7 @@
 5. [Testing](#testing)
    1. [Test Procedure](#test-procedure)
       1. [Step 1: Writing the Bubble Sort Algorithm in C](#step-1-writing-the-bubble-sort-algorithm-in-c)
-      2. [Step 2: Converting C Code to RISC-V Assembly](#step-2-converting-c-code-to-risc-v-assembly)
+      2. [Step 2: Converting C Code to RISC-V Assembly](#step-2converting-c-code-to-risc-v-assembly)
    2. [Binary Code](#binary-code)
 6. [Reports](#reports)
    1. [Timings Summary Report](#timings-summary-report)
@@ -92,7 +92,7 @@ Instruction Memory with Instruction Cache: This module stores instructions to be
 -**Data Memory:** The processor includes a data memory module for loading and storing operations during the MEM stage. The memory access is word-aligned and interacts with the register file to handle data retrieval and storage as load/store instructions specify.
 -**Hazard Detection and Forwarding Units:** To maintain pipeline efficiency, the design includes hazard detection and forwarding units, which identify data hazards and enable forwarding from EX, MEM, and WB stages to prevent pipeline stalls. A stall unit is also implemented to handle load-use instruction, branch instruction, and cache miss, preventing data hazards in cases where data dependencies exist.
 
-#### Pipelined-Cycle Datapath Execution
+#### Pipelined Datapath Execution
 
 In this pipelined design, instruction execution is divided across multiple cycles, with each stage handling a distinct part of the instruction lifecycle. The IF stage fetches the instruction, the ID stage decodes it, the EX stage performs the required ALU operations, the MEM stage handles memory accesses, and the WB stage writes the results back to the register file. This division allows multiple instructions to be in different stages of execution simultaneously, improving throughput. The design balances pipeline hazards and data dependencies to maintain efficient instruction flow, while timing constraints are applied to optimize performance on the Xilinx Artix-7 FPGA.
 

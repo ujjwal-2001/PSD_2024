@@ -18,7 +18,7 @@
 5. [Testing](#testing)
    1. [Test Procedure](#test-procedure)
       1. [Step 1: Writing the Bubble Sort Algorithm in C](#step-1-writing-the-bubble-sort-algorithm-in-c)
-      2. [Step 2: Converting C Code to RISC-V Assembly](#step-2-converting-c-code-to-risc-v-assembly)
+      2. [Step 2: Converting C Code to RISC-V Assembly](#step-2converting-c-code-to-risc-v-assembly)
    2. [Binary Code](#binary-code)
 6. [Reports](#reports)
    1. [Timings Summary Report](#timings-summary-report)
