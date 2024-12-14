@@ -27,18 +27,26 @@ module IF(
 
     reg  [31:0] PC_reg, PC_reg_q;
     reg  hit_q;
-    wire [31:0] InstructionFromMem, InstructionFromCache;
+    wire [127:0]InstructionFromMem;
+    wire [31:0] InstructionFromCache;
     wire [31:0] Instruction_d;
-    wire [37:0] CacheData, CacheWriteData;
-    wire [4:0]  Tag;
-    wire Valid, CacheWe;
+    wire [31:0] CacheData0, CacheData1, CacheData2, CacheData3;
+    reg  [36:0] ValidTagCacheData;
+    wire [31:0] CacheWriteData0, CacheWriteData1, CacheWriteData2, CacheWriteData3;
+    wire [4:0]  ValidTag;
+    wire [4:0]  ValidTagWrite;
+    wire CacheWe;
     
-    assign InstructionFromCache = CacheData[31:0];
-    assign Tag   = CacheData[36:32];
-    assign Valid = CacheData[37];
-    assign hit   = (Tag == PC_reg[9:5]) & Valid;
+    assign InstructionFromCache = ValidTagCacheData[31:0];
+    assign Tag   = ValidTagCacheData[35:32];
+    assign Valid = ValidTagCacheData[36];
+    assign hit   = (Tag == PC_reg[9:6]) & Valid;
     assign CacheWe = ~hit_q & ~reset;
-    assign CacheWriteData = {1'b1, PC_reg_q[9:5], InstructionFromMem};
+    assign CacheWriteData0 = InstructionFromMem[31:0];
+    assign CacheWriteData1 = InstructionFromMem[63:32];
+    assign CacheWriteData2 = InstructionFromMem[95:64];
+    assign CacheWriteData3 = InstructionFromMem[127:96];
+    assign ValidTagWrite = {1'b1, PC_reg_q[9:6]};
 
     assign Instruction_d = (Insert_NOP)? NOP : InstructionFromCache; // Insert NOP if required
 
@@ -58,15 +66,61 @@ module IF(
             Instruction <= (hit & IF_en)? Instruction_d : Instruction;
         end
     end
+
+    always@(*)begin
+        case(PC_reg[1:0])
+            2'b00: ValidTagCacheData = {ValidTag, CacheData0};
+            2'b01: ValidTagCacheData = {ValidTag, CacheData1};
+            2'b10: ValidTagCacheData = {ValidTag, CacheData2};
+            2'b11: ValidTagCacheData = {ValidTag, CacheData3};
+        endcase
+    end
     
-    dist_mem_gen_0 InstructionCache (
-    .a(PC_reg_q[4:0]),      // Write address
-    .d(CacheWriteData),     // Write data
-    .dpra(PC_reg[4:0]),     // Read address
+    dist_mem_gen_0 InstructionCache0 (
+    .a(PC_reg_q[5:2]),      // Write address
+    .d(CacheWriteData0),    // Write data
+    .dpra(PC_reg[5:2]),     // Read address
     .clk(clock),            // Clock
     .we(CacheWe),           // Write enable
-    .dpo(CacheData)         // Read data
+    .dpo(CacheData0)        // Read data
     );
+
+    dist_mem_gen_0 InstructionCache1 (
+    .a(PC_reg_q[5:2]),      // Write address
+    .d(CacheWriteData1),    // Write data
+    .dpra(PC_reg[5:2]),     // Read address
+    .clk(clock),            // Clock
+    .we(CacheWe),           // Write enable
+    .dpo(CacheData1)        // Read data
+    );
+
+    dist_mem_gen_0 InstructionCache2 (
+    .a(PC_reg_q[5:2]),      // Write address
+    .d(CacheWriteData2),    // Write data
+    .dpra(PC_reg[5:2]),     // Read address
+    .clk(clock),            // Clock
+    .we(CacheWe),           // Write enable
+    .dpo(CacheData2)        // Read data
+    );
+
+    dist_mem_gen_0 InstructionCache3 (
+    .a(PC_reg_q[5:2]),      // Write address
+    .d(CacheWriteData3),    // Write data
+    .dpra(PC_reg[5:2]),     // Read address
+    .clk(clock),            // Clock
+    .we(CacheWe),           // Write enable
+    .dpo(CacheData3)        // Read data
+    );
+
+    dist_mem_gen_2 ValidTagMem (
+    .a(PC_reg_q[5:2]),      // Write address
+    .d(ValidTagWrite),      // Write data
+    .dpra(PC_reg[5:2]),     // Read address
+    .clk(clock),            // Clock
+    .we(CacheWe),           // Write enable
+    .dpo(ValidTag)          // Read data
+    );
+
 
     blk_mem_gen_0 InstructionMem (      // Instruction memory - BRAM
         .clka(clock),
@@ -76,7 +130,7 @@ module IF(
         .dina(32'd0),
         .clkb(clock),
         .enb(1'b1),
-        .addrb(PC_reg[9:0]),
+        .addrb(PC_reg[9:2]),
         .doutb(InstructionFromMem)
     );
 

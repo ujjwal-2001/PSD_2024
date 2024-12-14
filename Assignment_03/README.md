@@ -84,7 +84,7 @@ The 32-bit 5-stage pipelined RISC-V processor follows a multi-cycle datapath des
 #### Key Components of the Datapath
  Program Counter (PC): The PC holds the address of the next instruction to be fetched. In the pipeline architecture, the PC is updated either sequentially or based on branch/jump decisions, allowing for instruction pre-fetching and branching without pipeline stalling.
 
-Instruction Memory with Instruction Cache: This module stores instructions to be executed and incorporates a direct-mapped instruction cache (32x32 bits) with a block size of four words. The cache enhances instruction fetch performance by reducing memory access time, while the instruction memory (1024x32 bits) is the primary storage.
+Instruction Memory with Instruction Cache: This module stores instructions to be executed and incorporates a direct-mapped instruction cache (4 banks of DRAM) with a block size of four words. The cache enhances instruction fetch performance by reducing memory access time, while the instruction memory (256x128 bits) is the primary storage.
 
 - **Register File:** The processor includes a register file with 32 registers (x0 to x31), where x0 is hardwired to zero. This file supports simultaneous reading of two source registers and writing to one destination register, ensuring efficient data flow through the pipeline stages.
 
@@ -312,7 +312,7 @@ The assembly code was then converted into binary instructions and loaded into th
 
 ## Reports
 
-The timing report from the FPGA synthesis confirms that all setup and hold times are met, with no timing violations at a 18.11 ns clock period. The timing summary is given in the figure below. The power and resource utilization reports are presented in the following figures:-
+The timing report from the FPGA synthesis confirms that all setup and hold times are met, with no timing violations at a 16.7 ns clock period. The timing summary is given in the figure below. The power and resource utilization reports are presented in the following figures:-
 
 #### Timings Summary Report
 <img src="./Assets/Time.png" alt="Level 0 Data-path" width="800"/>
@@ -328,7 +328,7 @@ The timing report from the FPGA synthesis confirms that all setup and hold times
 
 In this project, a 32-bit single-cycle RISC-V processor was successfully designed and implemented on the Digilent BASYS3 FPGA board. The processor supports a basic subset of RISC-V instructions, including arithmetic, logical, load/store, and branching operations. The processor was tested using a Bubble Sort algorithm, which verified its functional correctness. The sorted array was stored in registers, and the processor demonstrated stable performance during execution.
 
-The design process involved creating a complete datapath and control unit, ensuring proper communication between various components such as the ALU, register file, and memory units. The FPGA implementation showed that the processor meets timing requirements with no violations at a 21 ns clock period, and resource utilization was kept within the available limits.
+The design process involved creating a complete datapath and control unit, ensuring proper communication between various components such as the ALU, register file, and memory units. The FPGA implementation showed that the processor meets timing requirements with no violations at a 16.7 ns clock period, and resource utilization was kept within the available limits.
 
 Despite the processor's simplicity, it serves as a robust foundation for understanding single-cycle architectures. Future work could expand the instruction set to support more complex operations, such as multiplication and division, and optimize the design for better clock frequency performance.
 
